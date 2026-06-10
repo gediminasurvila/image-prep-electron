@@ -507,25 +507,63 @@
         overflow: hidden;
         background: var(--panel);
       }
-      .ba-pair {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2px;
-        background: var(--line);
-      }
-      .ba-item {
+      .ba-slider {
         position: relative;
+        overflow: hidden;
+        cursor: ew-resize;
+        touch-action: none;
+        user-select: none;
         background: var(--panel-2);
+        line-height: 0;
       }
-      .ba-item img {
-        width: 100%;
-        height: auto;
+      .ba-slider .ba-base {
         display: block;
+        width: 100%;
+      }
+      .ba-before-wrap {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 50%;
+        overflow: hidden;
+      }
+      .ba-before-wrap img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: auto;
+        max-width: none;
+      }
+      .ba-divider {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 2px;
+        background: rgba(255, 255, 255, 0.9);
+        transform: translateX(-1px);
+        pointer-events: none;
+      }
+      .ba-handle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #fff;
+        color: #16181c;
+        display: grid;
+        place-items: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
       }
       .ba-tag {
         position: absolute;
-        top: 10px;
-        left: 10px;
+        top: 12px;
+        left: 12px;
         font-size: 11px;
         font-weight: 700;
         letter-spacing: 0.05em;
@@ -534,19 +572,19 @@
         color: #fff;
         padding: 4px 9px;
         border-radius: 6px;
+        line-height: 1.2;
+        pointer-events: none;
       }
       .ba-tag.is-after {
+        left: auto;
+        right: 12px;
         background: var(--accent);
       }
       .ba figcaption {
         padding: 13px 18px;
         color: var(--muted);
         font-size: 14px;
-      }
-      @media (max-width: 560px) {
-        .ba-pair {
-          grid-template-columns: 1fr;
-        }
+        line-height: 1.5;
       }
 
       /* Unsigned-app notice (promoted) */
@@ -787,28 +825,38 @@
             <h2>Auto-enhance, image by image</h2>
             <p>
               ImagePrep analyzes each photo and corrects its own flaws — white balance, contrast,
-              and exposure. Left is the original; right is ImagePrep's automatic output.
+              and exposure. <b>Drag the slider</b> to compare the original with ImagePrep's
+              automatic output.
             </p>
           </div>
           <div class="ba-list">
             <figure class="ba reveal">
-              <div class="ba-pair">
-                <div class="ba-item"><span class="ba-tag">Before</span><img src="assets/ba-1-before.webp" alt="Original photo with a warm cast" loading="lazy" /></div>
-                <div class="ba-item"><span class="ba-tag is-after">After</span><img src="assets/ba-1-after.webp" alt="ImagePrep auto-enhanced" loading="lazy" /></div>
+              <div class="ba-slider">
+                <img class="ba-base" src="assets/ba-1-after.webp" alt="ImagePrep auto-enhanced soup photo" loading="lazy" />
+                <div class="ba-before-wrap"><img src="assets/ba-1-before.webp" alt="Original soup photo with a warm cast" /></div>
+                <span class="ba-tag">Before</span>
+                <span class="ba-tag is-after">After</span>
+                <div class="ba-divider"><span class="ba-handle">⟺</span></div>
               </div>
               <figcaption>Warm tungsten cast neutralized, with contrast and detail recovered.</figcaption>
             </figure>
             <figure class="ba reveal">
-              <div class="ba-pair">
-                <div class="ba-item"><span class="ba-tag">Before</span><img src="assets/ba-2-before.webp" alt="Dark original photo" loading="lazy" /></div>
-                <div class="ba-item"><span class="ba-tag is-after">After</span><img src="assets/ba-2-after.webp" alt="ImagePrep auto-enhanced" loading="lazy" /></div>
+              <div class="ba-slider">
+                <img class="ba-base" src="assets/ba-2-after.webp" alt="ImagePrep auto-enhanced interior photo" loading="lazy" />
+                <div class="ba-before-wrap"><img src="assets/ba-2-before.webp" alt="Dark original interior photo" /></div>
+                <span class="ba-tag">Before</span>
+                <span class="ba-tag is-after">After</span>
+                <div class="ba-divider"><span class="ba-handle">⟺</span></div>
               </div>
-              <figcaption>Under-exposed shot brightened and balanced — shadows opened up.</figcaption>
+              <figcaption>Under-exposed portrait brightened and balanced — shadows opened up while the mood stays.</figcaption>
             </figure>
             <figure class="ba reveal">
-              <div class="ba-pair">
-                <div class="ba-item"><span class="ba-tag">Before</span><img src="assets/ba-3-before.webp" alt="Flat original photo" loading="lazy" /></div>
-                <div class="ba-item"><span class="ba-tag is-after">After</span><img src="assets/ba-3-after.webp" alt="ImagePrep auto-enhanced" loading="lazy" /></div>
+              <div class="ba-slider">
+                <img class="ba-base" src="assets/ba-3-after.webp" alt="ImagePrep auto-enhanced photo" loading="lazy" />
+                <div class="ba-before-wrap"><img src="assets/ba-3-before.webp" alt="Flat original photo" /></div>
+                <span class="ba-tag">Before</span>
+                <span class="ba-tag is-after">After</span>
+                <div class="ba-divider"><span class="ba-handle">⟺</span></div>
               </div>
               <figcaption>Flat lighting gets cleaner contrast and truer colour.</figcaption>
             </figure>
@@ -932,6 +980,29 @@
         { threshold: 0.12 }
       );
       document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+      // Before/after drag sliders
+      document.querySelectorAll('.ba-slider').forEach((slider) => {
+        const before = slider.querySelector('.ba-before-wrap');
+        const divider = slider.querySelector('.ba-divider');
+        let dragging = false;
+        const setPos = (clientX) => {
+          const rect = slider.getBoundingClientRect();
+          const p = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+          const pct = (p * 100).toFixed(2) + '%';
+          before.style.width = pct;
+          divider.style.left = pct;
+        };
+        slider.addEventListener('pointerdown', (e) => {
+          dragging = true;
+          slider.setPointerCapture(e.pointerId);
+          setPos(e.clientX);
+        });
+        slider.addEventListener('pointermove', (e) => dragging && setPos(e.clientX));
+        const stop = () => (dragging = false);
+        slider.addEventListener('pointerup', stop);
+        slider.addEventListener('pointercancel', stop);
+      });
 
       // OS detection -> make the visitor's platform the primary download.
       (function detectOS() {
