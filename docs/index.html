@@ -523,6 +523,15 @@
         font-size: 15px;
         padding: 11px 16px;
       }
+      .dl-card .dl-alt {
+        margin-top: 9px;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .dl-card .dl-alt:hover {
+        color: var(--fg);
+      }
 
       /* Before / after */
       .ba-list {
@@ -981,8 +990,9 @@
               </div>
               <h3>Linux</h3>
               <span class="variant">x86-64</span>
-              <div class="file">.AppImage</div>
-              <a class="btn btn-ghost dlbtn" data-dl="linux" href="https://github.com/gediminasurvila/image-prep-electron/releases/latest">Download</a>
+              <div class="file">AppImage · .deb</div>
+              <a class="btn btn-ghost dlbtn" data-dl="linux" href="https://github.com/gediminasurvila/image-prep-electron/releases/latest">Download .AppImage</a>
+              <a class="dl-alt" data-dl="linux-deb" href="https://github.com/gediminasurvila/image-prep-electron/releases/latest">.deb for Debian / Ubuntu →</a>
             </div>
           </div>
 
@@ -996,7 +1006,7 @@
               <ul>
                 <li><b>Windows:</b> on the blue SmartScreen prompt, click <code>More info</code> → <code>Run anyway</code>.</li>
                 <li><b>macOS:</b> right-click (or Control-click) the app → <code>Open</code> → <code>Open</code>. If it's still blocked, run <code>xattr -dr com.apple.quarantine /Applications/ImagePrep.app</code>.</li>
-                <li><b>Linux:</b> make the file executable — <code>chmod +x ImagePrep-*.AppImage</code> — then double-click or run it.</li>
+                <li><b>Linux:</b> the <code>.deb</code> installs a proper menu entry &amp; app icon (Debian/Ubuntu). For the portable AppImage, <code>chmod +x ImagePrep-*.AppImage</code> then run it.</li>
               </ul>
             </div>
           </div>
@@ -1094,7 +1104,8 @@
             win: '-Setup-x64.exe',
             'mac-arm': '-arm64.dmg',
             'mac-intel': '-x64.dmg',
-            linux: '-x86_64.AppImage'
+            linux: '-x86_64.AppImage',
+            'linux-deb': '-amd64.deb'
           };
           Object.entries(map).forEach(([key, suffix]) => {
             const u = url(suffix);
