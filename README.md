@@ -26,7 +26,7 @@ Grab the latest installer for your platform from the
 |----------|------|
 | Windows  | `ImagePrep-<version>-Setup-x64.exe` (NSIS installer) |
 | macOS    | `ImagePrep-<version>-arm64.dmg` (Apple Silicon) · `ImagePrep-<version>-x64.dmg` (Intel) |
-| Linux    | `ImagePrep-<version>-x64.AppImage` (`chmod +x`, then run) |
+| Linux    | `ImagePrep-<version>-x86_64.AppImage` (`chmod +x`, then run) |
 
 > Builds are **unsigned**, so the OS may warn on first launch:
 > on macOS right-click → Open (or `xattr -dr com.apple.quarantine` the app);
