@@ -1,6 +1,6 @@
 {
   "name": "imageprep",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "ImagePrep - prepare images for web upload (resize, enhance, compress, convert) fully offline.",
   "main": "./out/main/index.js",
   "author": "Gediminas Survila",
