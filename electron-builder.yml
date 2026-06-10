@@ -42,6 +42,18 @@ linux:
     - target: AppImage
       arch:
         - x64
+    - target: deb
+      arch:
+        - x64
   category: Graphics
+  # Use a directory of properly-sized PNGs so each is installed into the correct
+  # hicolor icon-theme size folder (a single icon.png lands in a "0x0" folder
+  # that the theme can't find).
+  icon: build/icons
   synopsis: Prepare images for web upload — resize, enhance, compress, convert.
+  # StartupWMClass must match the running window's WM_CLASS so the desktop maps
+  # the window to this .desktop entry (and therefore shows the app icon, instead
+  # of a generic one) on GNOME/KDE.
+  desktop:
+    StartupWMClass: ImagePrep
   artifactName: ${productName}-${version}-${arch}.${ext}

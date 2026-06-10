@@ -1,9 +1,13 @@
 {
   "name": "imageprep",
-  "version": "0.1.3",
+  "productName": "ImagePrep",
+  "version": "0.1.4",
   "description": "ImagePrep - prepare images for web upload (resize, enhance, compress, convert) fully offline.",
   "main": "./out/main/index.js",
-  "author": "Gediminas Survila",
+  "author": {
+    "name": "Gediminas Survila",
+    "email": "survila.gediminas@gmail.com"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
