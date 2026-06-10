@@ -12,6 +12,8 @@ services.**
 Built with Electron · React · TypeScript · electron-vite · Sharp · Tailwind CSS ·
 Zustand · Zod · Electron Builder.
 
+**🌐 Website: [gediminasurvila.github.io/image-prep-electron](https://gediminasurvila.github.io/image-prep-electron/)**
+
 [![Release](https://github.com/gediminasurvila/image-prep-electron/actions/workflows/release.yml/badge.svg)](https://github.com/gediminasurvila/image-prep-electron/actions/workflows/release.yml)
 [![CI](https://github.com/gediminasurvila/image-prep-electron/actions/workflows/ci.yml/badge.svg)](https://github.com/gediminasurvila/image-prep-electron/actions/workflows/ci.yml)
 
