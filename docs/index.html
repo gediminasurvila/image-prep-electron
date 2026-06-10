@@ -23,7 +23,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
@@ -33,15 +33,15 @@
         --bg-2: #15171b;
         --panel: #1a1d22;
         --panel-2: #20242a;
-        --line: rgba(255, 255, 255, 0.09);
-        --line-2: rgba(255, 255, 255, 0.06);
+        --line: rgba(255, 255, 255, 0.11);
+        --line-2: rgba(255, 255, 255, 0.07);
         --fg: #f3f4f6;
         --muted: #aab0b9;
         --subtle: #7a818b;
-        --accent: #5b8cff;
-        --accent-2: #8a6cff;
+        --accent: #3b7af0;
+        --accent-press: #2f67dd;
         --ok: #5ed68f;
-        --radius: 16px;
+        --radius: 12px;
         --maxw: 1140px;
       }
 
@@ -64,7 +64,7 @@
       h1,
       h2,
       h3 {
-        font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+        font-family: 'Archivo', system-ui, sans-serif;
         font-weight: 700;
         line-height: 1.05;
         letter-spacing: -0.02em;
@@ -86,12 +86,6 @@
       .accent {
         color: var(--accent);
       }
-      .grad-text {
-        background: linear-gradient(100deg, var(--accent), var(--accent-2));
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-      }
 
       /* Atmosphere */
       .glow {
@@ -101,29 +95,18 @@
         pointer-events: none;
         z-index: 0;
       }
-      .glow::before,
-      .glow::after {
+      .glow::before {
         content: '';
         position: absolute;
         border-radius: 50%;
-        filter: blur(110px);
-        opacity: 0.45;
-      }
-      .glow::before {
-        width: 560px;
-        height: 560px;
-        top: -180px;
+        filter: blur(130px);
+        width: 620px;
+        height: 480px;
+        top: -240px;
         left: 50%;
-        transform: translateX(-60%);
-        background: radial-gradient(circle, #3b6dff, transparent 70%);
-      }
-      .glow::after {
-        width: 440px;
-        height: 440px;
-        top: -60px;
-        right: -120px;
-        background: radial-gradient(circle, #7b5cff, transparent 70%);
-        opacity: 0.3;
+        transform: translateX(-50%);
+        background: radial-gradient(circle, #2f5bd0, transparent 70%);
+        opacity: 0.22;
       }
 
       /* Nav */
@@ -131,9 +114,8 @@
         position: sticky;
         top: 0;
         z-index: 50;
-        backdrop-filter: blur(12px);
-        background: rgba(16, 17, 20, 0.7);
-        border-bottom: 1px solid var(--line-2);
+        background: var(--bg-2);
+        border-bottom: 1px solid var(--line);
       }
       .nav-inner {
         display: flex;
@@ -145,7 +127,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        font-family: 'Bricolage Grotesque', sans-serif;
+        font-family: 'Archivo', sans-serif;
         font-weight: 700;
         font-size: 18px;
         letter-spacing: -0.01em;
@@ -197,12 +179,15 @@
           border-color 0.15s ease;
       }
       .btn:hover {
-        transform: translateY(-2px);
+        transform: translateY(-1px);
       }
       .btn-primary {
-        background: linear-gradient(180deg, #6a97ff, #4f80f0);
+        background: var(--accent);
         color: #fff;
-        box-shadow: 0 8px 30px rgba(79, 128, 240, 0.35);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+      }
+      .btn-primary:hover {
+        background: var(--accent-press);
       }
       .btn-ghost {
         background: var(--panel);
@@ -279,8 +264,9 @@
           0 0 0 1px rgba(255, 255, 255, 0.02) inset;
       }
       .shot img {
-        border-radius: 10px;
+        border-radius: 8px;
         width: 100%;
+        height: auto;
       }
       .shot .winbar {
         display: flex;
@@ -338,7 +324,7 @@
         }
       }
       .card {
-        background: linear-gradient(180deg, var(--panel), var(--bg-2));
+        background: var(--panel);
         border: 1px solid var(--line);
         border-radius: var(--radius);
         padding: 26px;
@@ -347,8 +333,8 @@
           border-color 0.18s ease;
       }
       .card:hover {
-        transform: translateY(-4px);
-        border-color: rgba(91, 140, 255, 0.4);
+        transform: translateY(-3px);
+        border-color: rgba(59, 122, 240, 0.5);
       }
       .ic {
         width: 44px;
@@ -356,7 +342,7 @@
         border-radius: 12px;
         display: grid;
         place-items: center;
-        background: rgba(91, 140, 255, 0.12);
+        background: rgba(59, 122, 240, 0.12);
         color: var(--accent);
         margin-bottom: 16px;
       }
@@ -392,7 +378,7 @@
         padding: 28px;
       }
       .step .n {
-        font-family: 'Bricolage Grotesque', sans-serif;
+        font-family: 'Archivo', sans-serif;
         font-weight: 800;
         font-size: 15px;
         width: 34px;
@@ -472,8 +458,8 @@
         transition: border-color 0.18s ease;
       }
       .dl-card.rec {
-        border-color: rgba(91, 140, 255, 0.55);
-        box-shadow: 0 0 0 1px rgba(91, 140, 255, 0.25);
+        border-color: rgba(59, 122, 240, 0.55);
+        box-shadow: 0 0 0 1px rgba(59, 122, 240, 0.25);
       }
       .dl-card .os {
         color: var(--fg);
@@ -567,6 +553,13 @@
         max-width: var(--maxw);
         margin: 0 auto;
       }
+      a:focus-visible,
+      button:focus-visible,
+      .btn:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+        border-radius: 6px;
+      }
     </style>
   </head>
   <body>
@@ -591,7 +584,7 @@
         <div class="glow"></div>
         <div class="wrap" style="position: relative; z-index: 1">
           <span class="eyebrow"><span class="dot"></span> Free · Open source · 100% offline</span>
-          <h1>Prepare images for the <span class="grad-text">web</span>, in seconds</h1>
+          <h1>Prepare images for the <span class="accent">web</span>, in seconds</h1>
           <p class="lede">
             ImagePrep batch-resizes, auto-enhances, and compresses your photos to an exact file
             size — converting to modern web formats. No uploads, no accounts, nothing leaves your
@@ -613,7 +606,7 @@
         <div class="wrap">
           <div class="shot reveal">
             <div class="winbar"><i></i><i></i><i></i></div>
-            <img src="assets/screenshot-dark.png" alt="ImagePrep app — batch image preparation with before/after preview" width="1500" height="940" />
+            <img src="assets/screenshot-dark.png" alt="ImagePrep app — batch image preparation with before/after preview" width="1500" height="911" />
           </div>
         </div>
       </section>
