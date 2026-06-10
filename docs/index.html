@@ -6,19 +6,61 @@
     <title>ImagePrep — Prepare images for the web, offline</title>
     <meta
       name="description"
-      content="ImagePrep is a free, offline desktop app to batch-resize, auto-enhance, and compress images to an exact file size, converting to modern web formats. Windows, macOS & Linux."
+      content="ImagePrep is a free, open-source desktop app to batch-resize, auto-enhance, and compress images to an exact file size, converting to modern web formats like WebP. Fully offline — Windows, macOS & Linux."
     />
+    <meta
+      name="keywords"
+      content="image optimizer, batch image resize, compress images, target file size, WebP converter, AVIF, auto enhance photos, offline image tool, Electron, free"
+    />
+    <meta name="author" content="Gediminas Survila" />
+    <meta name="theme-color" content="#6878f8" />
+    <link rel="canonical" href="https://gediminasurvila.github.io/image-prep-electron/" />
     <link rel="icon" type="image/png" href="assets/icon.png" />
+    <link rel="apple-touch-icon" href="assets/icon.png" />
 
-    <!-- Open Graph / Twitter -->
+    <!-- Open Graph (Facebook, LinkedIn, Slack, Discord, …) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ImagePrep" />
     <meta property="og:title" content="ImagePrep — Prepare images for the web, offline" />
     <meta
       property="og:description"
       content="Batch-resize, auto-enhance, and compress images to an exact file size. Free, open source, fully offline."
     />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="assets/screenshot-dark.png" />
+    <meta property="og:url" content="https://gediminasurvila.github.io/image-prep-electron/" />
+    <meta property="og:image" content="https://gediminasurvila.github.io/image-prep-electron/assets/og.png?v=1" />
+    <meta property="og:image:secure_url" content="https://gediminasurvila.github.io/image-prep-electron/assets/og.png?v=1" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ImagePrep — prepare images for the web, offline" />
+
+    <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ImagePrep — Prepare images for the web, offline" />
+    <meta
+      name="twitter:description"
+      content="Batch-resize, auto-enhance, and compress images to an exact file size. Free, open source, fully offline."
+    />
+    <meta name="twitter:image" content="https://gediminasurvila.github.io/image-prep-electron/assets/og.png?v=1" />
+    <meta name="twitter:image:alt" content="ImagePrep — prepare images for the web, offline" />
+
+    <!-- Structured data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "ImagePrep",
+        "operatingSystem": "Windows, macOS, Linux",
+        "applicationCategory": "MultimediaApplication",
+        "description": "Free, open-source desktop app to batch-resize, auto-enhance, and compress images to an exact file size, converting to modern web formats. Fully offline.",
+        "url": "https://gediminasurvila.github.io/image-prep-electron/",
+        "downloadUrl": "https://github.com/gediminasurvila/image-prep-electron/releases/latest",
+        "image": "https://gediminasurvila.github.io/image-prep-electron/assets/og.png",
+        "author": { "@type": "Person", "name": "Gediminas Survila" },
+        "license": "https://github.com/gediminasurvila/image-prep-electron/blob/main/LICENSE",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      }
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -205,25 +247,13 @@
         text-align: center;
       }
       .eyebrow {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
+        display: inline-block;
+        margin-bottom: 22px;
         font-size: 13px;
-        font-weight: 600;
-        letter-spacing: 0.02em;
-        color: var(--muted);
-        border: 1px solid var(--line);
-        background: var(--panel);
-        padding: 6px 14px;
-        border-radius: 100px;
-        margin-bottom: 26px;
-      }
-      .eyebrow .dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: var(--ok);
-        box-shadow: 0 0 10px var(--ok);
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--subtle);
       }
       .hero h1 {
         font-size: clamp(40px, 7vw, 76px);
@@ -727,7 +757,7 @@
       <section class="hero">
         <div class="glow"></div>
         <div class="wrap" style="position: relative; z-index: 1">
-          <span class="eyebrow"><span class="dot"></span> Free · Open source · 100% offline</span>
+          <span class="eyebrow">Free · Open source · 100% offline</span>
           <h1>Prepare images for the <span class="accent">web</span>, in seconds</h1>
           <p class="lede">
             ImagePrep batch-resizes, auto-enhances, and compresses your photos to an exact file

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gediminasurvila.github.io/image-prep-electron/sitemap.xml
