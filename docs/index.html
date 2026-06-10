@@ -516,6 +516,11 @@
         background: var(--panel-2);
         line-height: 0;
       }
+      .ba-slider img {
+        pointer-events: none;
+        -webkit-user-drag: none;
+        user-select: none;
+      }
       .ba-slider .ba-base {
         display: block;
         width: 100%;
@@ -832,8 +837,8 @@
           <div class="ba-list">
             <figure class="ba reveal">
               <div class="ba-slider">
-                <img class="ba-base" src="assets/ba-1-after.webp" alt="ImagePrep auto-enhanced soup photo" loading="lazy" />
-                <div class="ba-before-wrap"><img src="assets/ba-1-before.webp" alt="Original soup photo with a warm cast" /></div>
+                <img class="ba-base" draggable="false" src="assets/ba-1-after.webp" alt="ImagePrep auto-enhanced soup photo" loading="lazy" />
+                <div class="ba-before-wrap"><img draggable="false" src="assets/ba-1-before.webp" alt="Original soup photo with a warm cast" /></div>
                 <span class="ba-tag">Before</span>
                 <span class="ba-tag is-after">After</span>
                 <div class="ba-divider"><span class="ba-handle">⟺</span></div>
@@ -842,23 +847,23 @@
             </figure>
             <figure class="ba reveal">
               <div class="ba-slider">
-                <img class="ba-base" src="assets/ba-2-after.webp" alt="ImagePrep auto-enhanced interior photo" loading="lazy" />
-                <div class="ba-before-wrap"><img src="assets/ba-2-before.webp" alt="Dark original interior photo" /></div>
+                <img class="ba-base" draggable="false" src="assets/ba-2-after.webp" alt="ImagePrep auto-enhanced portrait of a woman" loading="lazy" />
+                <div class="ba-before-wrap"><img draggable="false" src="assets/ba-2-before.webp" alt="Original window-lit portrait" /></div>
                 <span class="ba-tag">Before</span>
                 <span class="ba-tag is-after">After</span>
                 <div class="ba-divider"><span class="ba-handle">⟺</span></div>
               </div>
-              <figcaption>Under-exposed portrait brightened and balanced — shadows opened up while the mood stays.</figcaption>
+              <figcaption>Window-lit portrait — skin tones balanced, with gentle contrast and clarity added.</figcaption>
             </figure>
             <figure class="ba reveal">
               <div class="ba-slider">
-                <img class="ba-base" src="assets/ba-3-after.webp" alt="ImagePrep auto-enhanced photo" loading="lazy" />
-                <div class="ba-before-wrap"><img src="assets/ba-3-before.webp" alt="Flat original photo" /></div>
+                <img class="ba-base" draggable="false" src="assets/ba-3-after.webp" alt="ImagePrep auto-enhanced interior photo" loading="lazy" />
+                <div class="ba-before-wrap"><img draggable="false" src="assets/ba-3-before.webp" alt="Dark original interior photo" /></div>
                 <span class="ba-tag">Before</span>
                 <span class="ba-tag is-after">After</span>
                 <div class="ba-divider"><span class="ba-handle">⟺</span></div>
               </div>
-              <figcaption>Flat lighting gets cleaner contrast and truer colour.</figcaption>
+              <figcaption>Under-exposed interior brightened and balanced while keeping the mood.</figcaption>
             </figure>
           </div>
         </div>
@@ -994,6 +999,7 @@
           divider.style.left = pct;
         };
         slider.addEventListener('pointerdown', (e) => {
+          e.preventDefault();
           dragging = true;
           slider.setPointerCapture(e.pointerId);
           setPos(e.clientX);
