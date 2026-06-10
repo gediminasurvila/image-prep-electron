@@ -50,6 +50,7 @@ export function defaultAppSettings(): AppSettings {
     resize: defaultResizeSettings(),
     enhancement: defaultEnhancementSettings(),
     export: defaultExportSettings(),
-    selectedPresetId: undefined
+    selectedPresetId: undefined,
+    theme: 'system'
   }
 }

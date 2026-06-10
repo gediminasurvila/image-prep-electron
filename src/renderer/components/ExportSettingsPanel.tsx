@@ -36,7 +36,7 @@ export function ExportSettingsPanel(): React.JSX.Element {
       <Field label="Output folder">
         <div className="flex gap-2">
           <div
-            className="flex-1 truncate rounded-md border border-white/10 bg-panel px-2 py-1.5 text-xs text-white/70"
+            className="flex-1 truncate rounded-md border border-line bg-panel px-2 py-1.5 text-xs text-muted"
             title={exp.outputFolder || 'No folder selected'}
           >
             {exp.outputFolder || 'No folder selected'}
@@ -44,7 +44,7 @@ export function ExportSettingsPanel(): React.JSX.Element {
           <button
             type="button"
             onClick={chooseFolder}
-            className="inline-flex items-center gap-1 rounded-md border border-white/10 bg-panel-3 px-2 text-xs hover:bg-panel-3/70"
+            className="inline-flex items-center gap-1 rounded-md border border-line bg-panel-3 px-2 text-xs hover:bg-fill"
           >
             <Folder size={14} /> Choose
           </button>
@@ -86,7 +86,7 @@ export function ExportSettingsPanel(): React.JSX.Element {
       )}
 
       {exp.useTargetFileSize && isPng && (
-        <p className="text-[11px] text-amber-300">
+        <p className="text-[11px] text-warn">
           Target size mode applies to JPEG/WebP/AVIF. PNG will be exported losslessly.
         </p>
       )}
@@ -108,7 +108,7 @@ export function ExportSettingsPanel(): React.JSX.Element {
         />
       </Field>
 
-      <div className="border-t border-white/5 pt-2">
+      <div className="border-t border-line pt-2">
         <Toggle
           label="Strip metadata"
           checked={exp.stripMetadata}

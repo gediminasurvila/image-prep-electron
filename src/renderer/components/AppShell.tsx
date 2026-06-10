@@ -37,7 +37,7 @@ export function AppShell(): React.JSX.Element {
 
       <div className="flex min-h-0 flex-1">
         {/* LEFT: queue */}
-        <aside className="w-[300px] shrink-0 border-r border-white/5 bg-panel">
+        <aside className="w-[300px] shrink-0 border-r border-line bg-panel">
           <ImageQueue />
         </aside>
 
@@ -47,7 +47,7 @@ export function AppShell(): React.JSX.Element {
         </main>
 
         {/* RIGHT: settings */}
-        <aside className="w-[340px] shrink-0 space-y-3 overflow-y-auto border-l border-white/5 bg-panel p-3">
+        <aside className="w-[340px] shrink-0 space-y-3 overflow-y-auto border-l border-line bg-panel p-3">
           <PresetSelector />
           <ResizeSettingsPanel />
           <EnhancementSettingsPanel />
@@ -59,7 +59,7 @@ export function AppShell(): React.JSX.Element {
 
       {isDragActive && (
         <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="flex flex-col items-center gap-3 rounded-2xl border-2 border-dashed border-accent/60 bg-panel/80 px-12 py-10 text-accent">
+          <div className="flex flex-col items-center gap-3 rounded-2xl border-2 border-dashed border-accent-border bg-panel px-12 py-10 text-accent">
             <UploadCloud size={48} />
             <p className="text-lg font-semibold">Drop images to import</p>
           </div>

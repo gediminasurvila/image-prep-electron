@@ -13,33 +13,33 @@ export function StatusBar(): React.JSX.Element {
   const pct = Math.round((isProcessing ? fraction : completed / Math.max(total, 1)) * 100)
 
   return (
-    <div className="flex items-center gap-4 border-t border-white/5 bg-panel px-4 py-2 text-xs">
+    <div className="flex items-center gap-4 border-t border-line bg-panel px-4 py-2 text-xs">
       <div className="flex items-center gap-3">
         <Counter label="Total" value={total} />
-        <Counter label="Done" value={completed} className="text-green-300" />
-        <Counter label="Failed" value={failed} className="text-red-300" />
-        <Counter label="Skipped" value={skipped} className="text-amber-300" />
+        <Counter label="Done" value={completed} className="text-ok" />
+        <Counter label="Failed" value={failed} className="text-danger" />
+        <Counter label="Skipped" value={skipped} className="text-warn" />
       </div>
 
       <div className="flex flex-1 items-center gap-3">
-        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/10">
+        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-fill">
           <div
             className="h-full rounded-full bg-accent transition-all"
             style={{ width: `${pct}%` }}
           />
         </div>
-        <span className="w-10 text-right tabular-nums text-white/60">{pct}%</span>
+        <span className="w-10 text-right tabular-nums text-muted">{pct}%</span>
       </div>
 
       <div className="min-w-0 max-w-[40%] flex items-center gap-2">
-        <span className="truncate text-white/55" title={currentOperation}>
+        <span className="truncate text-muted" title={currentOperation}>
           {currentOperation || 'Idle'}
         </span>
         {isProcessing && (
           <button
             type="button"
             onClick={cancel}
-            className="rounded border border-red-400/30 px-2 py-0.5 text-[11px] text-red-300 hover:bg-red-500/10"
+            className="rounded border border-danger-border px-2 py-0.5 text-[11px] text-danger hover:bg-danger-soft"
           >
             Cancel
           </button>
@@ -59,8 +59,8 @@ function Counter({
   className?: string
 }): React.JSX.Element {
   return (
-    <span className="text-white/50">
-      {label}: <span className={`font-semibold tabular-nums ${className ?? 'text-white/80'}`}>{value}</span>
+    <span className="text-subtle">
+      {label}: <span className={`font-semibold tabular-nums ${className ?? 'text-fg'}`}>{value}</span>
     </span>
   )
 }

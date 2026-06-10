@@ -96,7 +96,7 @@ export function ResizeSettingsPanel(): React.JSX.Element {
 
       {!disabled &&
         errors.map((e) => (
-          <p key={e} className="text-[11px] text-amber-300">
+          <p key={e} className="text-[11px] text-warn">
             {e}
           </p>
         ))}

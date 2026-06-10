@@ -18,12 +18,12 @@ export function PresetSelector(): React.JSX.Element {
           onClick={clearPreset}
           className={`rounded-md border px-3 py-2 text-left transition-colors ${
             isCustom
-              ? 'border-accent bg-accent/15'
-              : 'border-white/5 bg-panel hover:bg-panel-3/60'
+              ? 'border-accent bg-accent-soft'
+              : 'border-line bg-panel hover:bg-panel-3'
           }`}
         >
-          <div className="text-sm font-medium text-white/90">Custom (no preset)</div>
-          <div className="mt-0.5 text-[11px] leading-snug text-white/50">
+          <div className="text-sm font-medium text-fg">Custom (no preset)</div>
+          <div className="mt-0.5 text-[11px] leading-snug text-subtle">
             Tune resize, enhancement, and export yourself — reduce by %, set max
             dimensions, or a max file size.
           </div>
@@ -38,13 +38,13 @@ export function PresetSelector(): React.JSX.Element {
               onClick={() => applyPreset(preset.id)}
               className={`rounded-md border px-3 py-2 text-left transition-colors ${
                 active
-                  ? 'border-accent bg-accent/15'
-                  : 'border-white/5 bg-panel hover:bg-panel-3/60'
+                  ? 'border-accent bg-accent-soft'
+                  : 'border-line bg-panel hover:bg-panel-3'
               }`}
             >
-              <div className="text-sm font-medium text-white/90">{preset.name}</div>
+              <div className="text-sm font-medium text-fg">{preset.name}</div>
               {preset.description && (
-                <div className="mt-0.5 text-[11px] leading-snug text-white/50">
+                <div className="mt-0.5 text-[11px] leading-snug text-subtle">
                   {preset.description}
                 </div>
               )}
@@ -52,7 +52,7 @@ export function PresetSelector(): React.JSX.Element {
           )
         })}
       </div>
-      <p className="text-[11px] text-white/40">
+      <p className="text-[11px] text-subtle">
         Applying a preset keeps your output folder and naming; it overrides size, format, and
         enhancement.
       </p>

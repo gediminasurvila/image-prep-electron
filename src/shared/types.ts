@@ -78,12 +78,16 @@ export interface ExportSettings {
   conflictMode: ConflictMode
 }
 
-/** The three configurable setting groups bundled together. */
+/** UI theme: follow the OS, or force light/dark. */
+export type ThemeMode = 'system' | 'light' | 'dark'
+
+/** The configurable setting groups bundled together. */
 export interface AppSettings {
   resize: ResizeSettings
   enhancement: EnhancementSettings
   export: ExportSettings
   selectedPresetId?: string
+  theme: ThemeMode
 }
 
 export interface ImagePreset {

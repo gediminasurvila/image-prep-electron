@@ -2,8 +2,85 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/*
+ * Theme tokens. A single class on <html> (`theme-dark` / `theme-light`) swaps
+ * the variable set, so every component stays theme-agnostic. Defaults to dark
+ * to avoid a flash before the theme controller runs.
+ *
+ * Palette is intentionally NEUTRAL (no blue tint) with one calm accent, and
+ * text tokens are tuned for strong contrast (WCAG AA+) for comfortable reading.
+ */
+:root,
+.theme-dark {
   color-scheme: dark;
+
+  --surface: #161719;
+  --panel: #1c1e21;
+  --panel-2: #191b1d;
+  --panel-3: #2a2d31;
+
+  --canvas: #313338; /* neutral gray image backdrop */
+  --canvas-checker: #393b40;
+
+  --line: #313338;
+  --fill: rgba(255, 255, 255, 0.06);
+  --fill-strong: rgba(255, 255, 255, 0.12);
+
+  --fg: #f1f2f4; /* ~15:1 on panel */
+  --fg-muted: #b4b8bf; /* ~8:1 */
+  --fg-subtle: #888d95; /* ~4.6:1 (hints) */
+
+  --accent: #3f80f5;
+  --accent-hover: #5a93ff;
+  --accent-soft: rgba(63, 128, 245, 0.16);
+  --accent-fg: #ffffff;
+  --accent-border: rgba(63, 128, 245, 0.5);
+
+  --ok: #5ed68f;
+  --ok-soft: rgba(34, 197, 94, 0.16);
+  --warn: #f1b24a;
+  --warn-soft: rgba(245, 158, 11, 0.16);
+  --danger: #f6736f;
+  --danger-soft: rgba(239, 68, 68, 0.16);
+  --danger-border: rgba(246, 115, 111, 0.42);
+  --info: #6ea8fe;
+  --info-soft: rgba(59, 130, 246, 0.18);
+}
+
+.theme-light {
+  color-scheme: light;
+
+  --surface: #eceef1;
+  --panel: #ffffff;
+  --panel-2: #f4f6f8;
+  --panel-3: #e9ebee;
+
+  --canvas: #c2c5ca; /* neutral light-gray image backdrop */
+  --canvas-checker: #b3b7bd;
+
+  --line: #dcdfe4;
+  --fill: rgba(18, 20, 26, 0.05);
+  --fill-strong: rgba(18, 20, 26, 0.1);
+
+  --fg: #1a1c20; /* ~16:1 on panel */
+  --fg-muted: #515660; /* ~8:1 */
+  --fg-subtle: #767b84; /* ~4.6:1 */
+
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-soft: rgba(37, 99, 235, 0.12);
+  --accent-fg: #ffffff;
+  --accent-border: rgba(37, 99, 235, 0.45);
+
+  --ok: #15803d;
+  --ok-soft: rgba(22, 163, 74, 0.13);
+  --warn: #b45309;
+  --warn-soft: rgba(217, 119, 6, 0.14);
+  --danger: #c0322b;
+  --danger-soft: rgba(220, 38, 38, 0.1);
+  --danger-border: rgba(192, 50, 43, 0.4);
+  --info: #1d4ed8;
+  --info-soft: rgba(37, 99, 235, 0.1);
 }
 
 html,
@@ -14,36 +91,58 @@ body,
 }
 
 body {
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background: #181b27;
-  color: #e6e8ef;
+  font-family:
+    system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: var(--surface);
+  color: var(--fg);
   overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* Thin scrollbars for the panels */
+/* Thin, theme-aware scrollbars */
 *::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 *::-webkit-scrollbar-thumb {
-  background: #3a4156;
+  background: var(--fill-strong);
   border-radius: 6px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--fg-subtle);
 }
 *::-webkit-scrollbar-track {
   background: transparent;
 }
 
-/* Checkerboard backdrop to reveal transparency in previews */
+/* Neutral checkerboard to reveal image transparency without colour bias */
 .checkerboard {
+  background-color: var(--canvas);
   background-image:
-    linear-gradient(45deg, #2a2f40 25%, transparent 25%),
-    linear-gradient(-45deg, #2a2f40 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #2a2f40 75%),
-    linear-gradient(-45deg, transparent 75%, #2a2f40 75%);
+    linear-gradient(45deg, var(--canvas-checker) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--canvas-checker) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--canvas-checker) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--canvas-checker) 75%);
   background-size: 20px 20px;
   background-position:
     0 0,
     0 10px,
     10px -10px,
     -10px 0px;
+}
+
+/* Clear keyboard-focus indication for accessibility */
+:where(button, [role='button'], a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Respect users who reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
 }

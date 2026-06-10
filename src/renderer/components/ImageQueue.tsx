@@ -11,16 +11,16 @@ export function ImageQueue(): React.JSX.Element {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between px-3 py-2 border-b border-white/5">
-        <h2 className="text-xs font-semibold uppercase tracking-wide text-white/60">
+      <div className="flex items-center justify-between px-3 py-2 border-b border-line">
+        <h2 className="text-xs font-semibold uppercase tracking-wide text-muted">
           Queue
         </h2>
-        <span className="text-xs text-white/40">{items.length} image(s)</span>
+        <span className="text-xs text-subtle">{items.length} image(s)</span>
       </div>
 
       {items.length === 0 ? (
-        <div className="flex flex-1 flex-col items-center justify-center gap-2 p-6 text-center text-white/40">
-          <Images size={32} className="text-white/25" />
+        <div className="flex flex-1 flex-col items-center justify-center gap-2 p-6 text-center text-subtle">
+          <Images size={32} className="text-subtle" />
           <p className="text-sm">No images yet</p>
           <p className="text-xs">Drag &amp; drop images here, or use Import.</p>
         </div>

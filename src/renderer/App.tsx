@@ -1,17 +1,22 @@
 import React, { useEffect } from 'react'
 import { AppShell } from './components/AppShell'
 import { api } from './lib/electronApi'
+import { watchTheme } from './lib/theme'
 import { useSettingsStore } from './stores/settingsStore'
 import { useImageQueueStore } from './stores/imageQueueStore'
 import { useProcessingStore } from './stores/processingStore'
 
 export default function App(): React.JSX.Element {
   const hydrate = useSettingsStore((s) => s.hydrate)
+  const theme = useSettingsStore((s) => s.theme)
 
   // Load persisted settings once on startup.
   useEffect(() => {
     void hydrate()
   }, [hydrate])
+
+  // Apply theme and follow OS changes when in "system" mode.
+  useEffect(() => watchTheme(theme), [theme])
 
   // Wire IPC progress/result events to the stores. Each item-level result
   // updates the queue; batch progress drives the status bar.

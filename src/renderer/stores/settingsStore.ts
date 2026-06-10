@@ -19,7 +19,8 @@ import type {
   EnhancementMode,
   EnhancementSettings,
   ExportSettings,
-  ResizeSettings
+  ResizeSettings,
+  ThemeMode
 } from '../types/image'
 
 interface SettingsState {
@@ -27,6 +28,7 @@ interface SettingsState {
   enhancement: EnhancementSettings
   export: ExportSettings
   selectedPresetId: string | undefined
+  theme: ThemeMode
   hydrated: boolean
   avifSupported: boolean
 
@@ -35,6 +37,7 @@ interface SettingsState {
   setEnhancement: (patch: Partial<EnhancementSettings>) => void
   setExport: (patch: Partial<ExportSettings>) => void
   setEnhancementMode: (mode: EnhancementMode) => void
+  setTheme: (theme: ThemeMode) => void
   applyPreset: (id: string) => void
   clearPreset: () => void
   getAppSettings: () => AppSettings
@@ -59,6 +62,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => {
     enhancement: defaultEnhancementSettings(),
     export: defaultExportSettings(),
     selectedPresetId: undefined,
+    theme: 'system',
     hydrated: false,
     avifSupported: true,
 
@@ -72,9 +76,17 @@ export const useSettingsStore = create<SettingsState>((set, get) => {
         enhancement: loaded.enhancement,
         export: loaded.export,
         selectedPresetId: loaded.selectedPresetId,
+        theme: loaded.theme,
         avifSupported,
         hydrated: true
       })
+    },
+
+    setTheme: (theme) => {
+      // Theme is a UI preference, not a processing setting — keep any active
+      // preset selected.
+      set({ theme })
+      persistAfter()
     },
 
     setResize: (patch) => {
@@ -128,7 +140,8 @@ export const useSettingsStore = create<SettingsState>((set, get) => {
         resize: s.resize,
         enhancement: s.enhancement,
         export: s.export,
-        selectedPresetId: s.selectedPresetId
+        selectedPresetId: s.selectedPresetId,
+        theme: s.theme
       }
     }
   }

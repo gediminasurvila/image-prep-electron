@@ -85,11 +85,14 @@ export const exportSettingsSchema = z.object({
   conflictMode: conflictModeSchema
 }) satisfies z.ZodType<ExportSettings>
 
+export const themeModeSchema = z.enum(['system', 'light', 'dark'])
+
 export const appSettingsSchema = z.object({
   resize: resizeSettingsSchema,
   enhancement: enhancementSettingsSchema,
   export: exportSettingsSchema,
-  selectedPresetId: z.string().optional()
+  selectedPresetId: z.string().optional(),
+  theme: themeModeSchema
 }) satisfies z.ZodType<AppSettings>
 
 export const processImageRequestSchema = z.object({

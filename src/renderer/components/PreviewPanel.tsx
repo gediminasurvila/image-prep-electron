@@ -128,8 +128,8 @@ export function PreviewPanel(): React.JSX.Element {
 
   if (!selected) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-2 text-white/35">
-        <ImageIcon size={40} className="text-white/20" />
+      <div className="flex h-full flex-col items-center justify-center gap-2 text-subtle">
+        <ImageIcon size={40} className="text-subtle" />
         <p className="text-sm">Select an image to preview</p>
       </div>
     )
@@ -138,7 +138,7 @@ export function PreviewPanel(): React.JSX.Element {
   return (
     <div className="flex h-full flex-col">
       {/* Tabs + action */}
-      <div className="flex items-center justify-between gap-2 border-b border-white/5 px-3 py-2">
+      <div className="flex items-center justify-between gap-2 border-b border-line px-3 py-2">
         <div className="flex gap-1 rounded-md bg-panel p-0.5">
           {(['original', 'processed', 'side-by-side'] as PreviewTab[]).map((t) => (
             <button
@@ -146,7 +146,7 @@ export function PreviewPanel(): React.JSX.Element {
               type="button"
               onClick={() => setTab(t)}
               className={`rounded px-3 py-1 text-xs font-medium capitalize transition-colors ${
-                tab === t ? 'bg-panel-3 text-white' : 'text-white/55 hover:text-white/80'
+                tab === t ? 'bg-panel-3 text-fg' : 'text-muted hover:text-fg'
               }`}
             >
               {t.replace('-', ' ')}
@@ -157,17 +157,17 @@ export function PreviewPanel(): React.JSX.Element {
           type="button"
           onClick={() => void generateProcessed()}
           disabled={loading}
-          className="inline-flex items-center gap-1.5 rounded-md bg-panel-3 px-3 py-1.5 text-xs font-medium hover:bg-panel-3/70 disabled:opacity-40"
+          className="inline-flex items-center gap-1.5 rounded-md bg-panel-3 px-3 py-1.5 text-xs font-medium hover:bg-fill disabled:opacity-40"
         >
           {loading ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
           Update preview
         </button>
       </div>
 
-      {/* Image area */}
-      <div className="flex flex-1 items-center justify-center overflow-auto p-4">
+      {/* Image area — neutral gray so photos read truthfully */}
+      <div className="flex flex-1 items-center justify-center overflow-auto bg-canvas p-4">
         {error ? (
-          <div className="max-w-sm text-center text-sm text-red-300">{error}</div>
+          <div className="max-w-sm text-center text-sm text-danger">{error}</div>
         ) : tab === 'side-by-side' ? (
           <div className="grid h-full w-full grid-cols-2 gap-3">
             <PreviewImage label="Original" url={originalUrl} />
@@ -181,7 +181,7 @@ export function PreviewPanel(): React.JSX.Element {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 gap-x-6 gap-y-1 border-t border-white/5 px-4 py-3 text-xs sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-x-6 gap-y-1 border-t border-line px-4 py-3 text-xs sm:grid-cols-4">
         <Stat label="Original size" value={formatDimensions(selected.originalWidth, selected.originalHeight)} />
         <Stat
           label="Output size"
@@ -195,9 +195,9 @@ export function PreviewPanel(): React.JSX.Element {
         />
       </div>
       {processed?.quality != null && (
-        <div className="px-4 pb-2 text-[11px] text-white/45">
+        <div className="px-4 pb-2 text-[11px] text-subtle">
           Encoded at quality {processed.quality}
-          {processed.warning && <span className="ml-2 text-amber-300">{processed.warning}</span>}
+          {processed.warning && <span className="ml-2 text-warn">{processed.warning}</span>}
         </div>
       )}
     </div>
@@ -217,10 +217,10 @@ function PreviewImage({
 }): React.JSX.Element {
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <div className="mb-1 text-center text-[10px] uppercase tracking-wide text-white/40">
+      <div className="mb-1 text-center text-[10px] uppercase tracking-wide text-subtle">
         {label}
       </div>
-      <div className="checkerboard flex flex-1 items-center justify-center overflow-hidden rounded-lg border border-white/5">
+      <div className="checkerboard flex flex-1 items-center justify-center overflow-hidden rounded-lg border border-line">
         {url ? (
           <img
             src={url}
@@ -228,7 +228,7 @@ function PreviewImage({
             className={`${big ? 'max-h-full max-w-full' : 'max-h-full max-w-full'} object-contain`}
           />
         ) : (
-          <div className="flex items-center gap-2 text-xs text-white/35">
+          <div className="flex items-center gap-2 text-xs text-subtle">
             {loading ? (
               <>
                 <Loader2 size={14} className="animate-spin" /> Rendering…
@@ -254,8 +254,8 @@ function Stat({
 }): React.JSX.Element {
   return (
     <div>
-      <div className="text-[10px] uppercase tracking-wide text-white/40">{label}</div>
-      <div className={`text-sm font-medium ${accent ? 'text-green-300' : 'text-white/85'}`}>
+      <div className="text-[10px] uppercase tracking-wide text-subtle">{label}</div>
+      <div className={`text-sm font-medium ${accent ? 'text-ok' : 'text-fg'}`}>
         {value}
       </div>
     </div>

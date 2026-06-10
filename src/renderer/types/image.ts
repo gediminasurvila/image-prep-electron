@@ -20,5 +20,6 @@ export type {
   ProcessImageRequest,
   ProcessImageResult,
   ResizeMode,
-  ResizeSettings
+  ResizeSettings,
+  ThemeMode
 } from '@shared/types'

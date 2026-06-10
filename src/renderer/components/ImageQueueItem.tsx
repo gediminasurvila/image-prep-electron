@@ -4,11 +4,11 @@ import type { ImageItem, ImageStatus } from '../types/image'
 import { formatBytes, formatDimensions, sizeDeltaLabel } from '../lib/formatBytes'
 
 const STATUS_STYLES: Record<ImageStatus, string> = {
-  pending: 'bg-white/10 text-white/60',
-  processing: 'bg-blue-500/20 text-blue-200 animate-pulse',
-  done: 'bg-green-500/20 text-green-200',
-  error: 'bg-red-500/20 text-red-200',
-  skipped: 'bg-amber-500/20 text-amber-200'
+  pending: 'bg-fill text-muted',
+  processing: 'bg-info-soft text-info animate-pulse',
+  done: 'bg-ok-soft text-ok',
+  error: 'bg-danger-soft text-danger',
+  skipped: 'bg-warn-soft text-warn'
 }
 
 export function ImageQueueItem({
@@ -32,8 +32,8 @@ export function ImageQueueItem({
       onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onSelect()}
       className={`group flex gap-2.5 rounded-lg border p-2 text-left transition-colors ${
         selected
-          ? 'border-accent bg-accent/10'
-          : 'border-transparent bg-panel-2 hover:bg-panel-3/50'
+          ? 'border-accent bg-accent-soft'
+          : 'border-transparent bg-panel-2 hover:bg-panel-3'
       }`}
     >
       <div className="checkerboard flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-md bg-panel">
@@ -44,13 +44,13 @@ export function ImageQueueItem({
             className="h-full w-full object-cover"
           />
         ) : (
-          <ImageOff size={18} className="text-white/30" />
+          <ImageOff size={18} className="text-subtle" />
         )}
       </div>
 
       <div className="min-w-0 flex-1">
         <div className="flex items-center justify-between gap-2">
-          <span className="truncate text-sm font-medium text-white/90" title={item.fileName}>
+          <span className="truncate text-sm font-medium text-fg" title={item.fileName}>
             {item.fileName}
           </span>
           <button
@@ -59,14 +59,14 @@ export function ImageQueueItem({
               e.stopPropagation()
               onRemove()
             }}
-            className="opacity-0 transition-opacity group-hover:opacity-100 text-white/40 hover:text-red-300"
+            className="opacity-0 transition-opacity group-hover:opacity-100 text-subtle hover:text-danger"
             title="Remove"
           >
             <X size={15} />
           </button>
         </div>
 
-        <div className="mt-0.5 text-[11px] text-white/50">
+        <div className="mt-0.5 text-[11px] text-subtle">
           {formatDimensions(item.originalWidth, item.originalHeight)} ·{' '}
           {formatBytes(item.originalSizeBytes)}
         </div>
@@ -78,20 +78,20 @@ export function ImageQueueItem({
             {item.status}
           </span>
           {item.outputSizeBytes != null && (
-            <span className="text-[10px] text-white/55">
+            <span className="text-[10px] text-muted">
               → {formatBytes(item.outputSizeBytes)}
-              {delta && <span className="ml-1 text-green-300">{delta}</span>}
+              {delta && <span className="ml-1 text-ok">{delta}</span>}
             </span>
           )}
         </div>
 
         {item.error && (
-          <div className="mt-1 truncate text-[10px] text-red-300" title={item.error}>
+          <div className="mt-1 truncate text-[10px] text-danger" title={item.error}>
             {item.error}
           </div>
         )}
         {item.warning && !item.error && (
-          <div className="mt-1 truncate text-[10px] text-amber-300" title={item.warning}>
+          <div className="mt-1 truncate text-[10px] text-warn" title={item.warning}>
             {item.warning}
           </div>
         )}

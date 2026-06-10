@@ -17,15 +17,15 @@ export function EnhancementSettingsPanel(): React.JSX.Element {
       right={<ModeToggle mode={enhancement.mode} onChange={setMode} />}
     >
       {!isManual ? (
-        <div className="rounded-md border border-accent/30 bg-accent/10 p-3">
-          <div className="flex items-center gap-2 text-sm font-medium text-white/90">
+        <div className="rounded-md border border-accent-border bg-accent-soft p-3">
+          <div className="flex items-center gap-2 text-sm font-medium text-fg">
             <Sparkles size={15} className="text-accent" />
             Auto correction is ON
           </div>
-          <p className="mt-1 text-[11px] leading-snug text-white/55">
+          <p className="mt-1 text-[11px] leading-snug text-muted">
             Each image is analyzed on its own and corrected for its specific
             issues — white-balance cast, low contrast, and under-exposure — then
-            lightly sharpened. Switch to <span className="text-white/80">Manual</span> to
+            lightly sharpened. Switch to <span className="text-fg">Manual</span> to
             set values yourself.
           </p>
         </div>
@@ -67,7 +67,7 @@ export function EnhancementSettingsPanel(): React.JSX.Element {
             />
           </Field>
 
-          <div className="border-t border-white/5 pt-2">
+          <div className="border-t border-line pt-2">
             <Toggle
               label="Sharpen after resize"
               checked={enhancement.sharpen}
@@ -105,7 +105,7 @@ function ModeToggle({
         type="button"
         onClick={() => onChange('auto')}
         className={`flex items-center gap-1 rounded px-2 py-0.5 transition-colors ${
-          mode === 'auto' ? 'bg-accent text-white' : 'text-white/55 hover:text-white/80'
+          mode === 'auto' ? 'bg-accent text-accent-fg' : 'text-muted hover:text-fg'
         }`}
       >
         <Sparkles size={12} /> Auto
@@ -114,7 +114,7 @@ function ModeToggle({
         type="button"
         onClick={() => onChange('manual')}
         className={`flex items-center gap-1 rounded px-2 py-0.5 transition-colors ${
-          mode === 'manual' ? 'bg-panel-3 text-white' : 'text-white/55 hover:text-white/80'
+          mode === 'manual' ? 'bg-panel-3 text-fg' : 'text-muted hover:text-fg'
         }`}
       >
         <SlidersHorizontal size={12} /> Manual

@@ -39,7 +39,9 @@ export interface ExportReadiness {
   reasons: string[]
 }
 
-export function exportReadiness(settings: AppSettings): ExportReadiness {
+export function exportReadiness(
+  settings: Pick<AppSettings, 'resize' | 'export'>
+): ExportReadiness {
   const reasons: string[] = []
   if (!settings.export.outputFolder) reasons.push('Select an output folder.')
   reasons.push(...resizeFieldErrors(settings.resize))

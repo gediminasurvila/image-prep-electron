@@ -14,9 +14,9 @@ export function Panel({
   right?: React.ReactNode
 }): React.JSX.Element {
   return (
-    <section className="rounded-lg border border-white/5 bg-panel-2">
-      <header className="flex items-center justify-between px-3 py-2 border-b border-white/5">
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-white/60">{title}</h3>
+    <section className="rounded-lg border border-line bg-panel-2">
+      <header className="flex items-center justify-between px-3 py-2 border-b border-line">
+        <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">{title}</h3>
         {right}
       </header>
       <div className="p-3 space-y-3">{children}</div>
@@ -36,8 +36,8 @@ export function Field({
   return (
     <label className="block">
       <div className="mb-1 flex items-center justify-between">
-        <span className="text-xs text-white/70">{label}</span>
-        {hint && <span className="text-[10px] text-white/40">{hint}</span>}
+        <span className="text-xs text-muted">{label}</span>
+        {hint && <span className="text-[10px] text-subtle">{hint}</span>}
       </div>
       {children}
     </label>
@@ -64,7 +64,7 @@ export function NumberInput({
   return (
     <input
       type="number"
-      className="w-full rounded-md border border-white/10 bg-panel px-2 py-1.5 text-sm outline-none focus:border-accent disabled:opacity-40"
+      className="w-full rounded-md border border-line bg-panel px-2 py-1.5 text-sm outline-none focus:border-accent disabled:opacity-40"
       value={value ?? ''}
       min={min}
       max={max}
@@ -93,7 +93,7 @@ export function TextInput({
   return (
     <input
       type="text"
-      className="w-full rounded-md border border-white/10 bg-panel px-2 py-1.5 text-sm outline-none focus:border-accent disabled:opacity-40"
+      className="w-full rounded-md border border-line bg-panel px-2 py-1.5 text-sm outline-none focus:border-accent disabled:opacity-40"
       value={value}
       disabled={disabled}
       placeholder={placeholder}
@@ -115,7 +115,7 @@ export function Select<T extends string>({
 }): React.JSX.Element {
   return (
     <select
-      className="w-full rounded-md border border-white/10 bg-panel px-2 py-1.5 text-sm outline-none focus:border-accent disabled:opacity-40"
+      className="w-full rounded-md border border-line bg-panel px-2 py-1.5 text-sm outline-none focus:border-accent disabled:opacity-40"
       value={value}
       disabled={disabled}
       onChange={(e) => onChange(e.target.value as T)}
@@ -140,18 +140,18 @@ export function Toggle({
 }): React.JSX.Element {
   return (
     <label className="flex cursor-pointer items-center justify-between gap-3 py-0.5">
-      <span className="text-xs text-white/80">{label}</span>
+      <span className="text-xs text-fg">{label}</span>
       <button
         type="button"
         role="switch"
         aria-checked={checked}
         onClick={() => onChange(!checked)}
         className={`relative h-5 w-9 shrink-0 rounded-full transition-colors ${
-          checked ? 'bg-accent' : 'bg-white/15'
+          checked ? 'bg-accent' : 'bg-fill-strong'
         }`}
       >
         <span
-          className={`absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all ${
+          className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-sm transition-all ${
             checked ? 'left-4' : 'left-0.5'
           }`}
         />
@@ -189,7 +189,7 @@ export function Slider({
         disabled={disabled}
         onChange={(e) => onChange(Number(e.target.value))}
       />
-      <span className="w-12 shrink-0 text-right text-xs tabular-nums text-white/70">
+      <span className="w-12 shrink-0 text-right text-xs tabular-nums text-muted">
         {value}
         {suffix ?? ''}
       </span>
@@ -212,10 +212,10 @@ export function ToolbarButton({
 }): React.JSX.Element {
   const styles =
     variant === 'primary'
-      ? 'bg-accent text-white hover:bg-accent/90'
+      ? 'bg-accent text-accent-fg hover:bg-accent-hover'
       : variant === 'danger'
-        ? 'bg-transparent text-red-300 hover:bg-red-500/10 border border-red-400/30'
-        : 'bg-panel-3 text-white/85 hover:bg-panel-3/70 border border-white/5'
+        ? 'bg-transparent text-danger hover:bg-danger-soft border border-danger-border'
+        : 'bg-panel-3 text-fg hover:bg-fill border border-line'
   return (
     <button
       type="button"

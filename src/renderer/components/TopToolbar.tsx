@@ -6,6 +6,7 @@ import { runBatch, useProcessingStore } from '../stores/processingStore'
 import { api } from '../lib/electronApi'
 import { buildProcessRequest, exportReadiness } from '../lib/validation'
 import { ToolbarButton } from './ui'
+import { ThemeToggle } from './ThemeToggle'
 
 export function TopToolbar(): React.JSX.Element {
   const importPaths = useImageQueueStore((s) => s.importPaths)
@@ -61,7 +62,7 @@ export function TopToolbar(): React.JSX.Element {
   const exportDisabled = isProcessing || !readiness.ok
 
   return (
-    <div className="flex items-center gap-2 border-b border-white/5 bg-panel px-3 py-2">
+    <div className="flex items-center gap-2 border-b border-line bg-panel px-3 py-2">
       <ToolbarButton onClick={handleImportImages} disabled={isProcessing} title="Import images">
         <FilePlus2 size={15} /> Import
       </ToolbarButton>
@@ -77,7 +78,7 @@ export function TopToolbar(): React.JSX.Element {
         <Trash2 size={15} /> Clear
       </ToolbarButton>
 
-      <div className="h-5 w-px bg-white/10" />
+      <div className="h-5 w-px bg-fill" />
 
       <ToolbarButton onClick={handleSelectOutput} title="Choose output folder">
         <FolderOutput size={15} /> Output
@@ -85,7 +86,7 @@ export function TopToolbar(): React.JSX.Element {
 
       <div className="ml-auto flex items-center gap-2">
         {!readiness.ok && (
-          <span className="text-[11px] text-amber-300" title={readiness.reasons.join('\n')}>
+          <span className="text-[11px] text-warn" title={readiness.reasons.join('\n')}>
             {readiness.reasons[0]}
           </span>
         )}
@@ -104,6 +105,9 @@ export function TopToolbar(): React.JSX.Element {
         >
           <DownloadCloud size={15} /> Export All
         </ToolbarButton>
+
+        <div className="h-5 w-px bg-line" />
+        <ThemeToggle />
       </div>
     </div>
   )
