@@ -6,7 +6,6 @@ import { runBatch, useProcessingStore } from '../stores/processingStore'
 import { api } from '../lib/electronApi'
 import { buildProcessRequest, exportReadiness } from '../lib/validation'
 import { ToolbarButton } from './ui'
-import { Logo } from './Logo'
 
 export function TopToolbar(): React.JSX.Element {
   const importPaths = useImageQueueStore((s) => s.importPaths)
@@ -105,11 +104,6 @@ export function TopToolbar(): React.JSX.Element {
         >
           <DownloadCloud size={15} /> Export All
         </ToolbarButton>
-
-        <div className="h-5 w-px bg-white/10" />
-        <span className="flex select-none items-center pl-0.5" title="ImagePrep">
-          <Logo size={22} />
-        </span>
       </div>
     </div>
   )
