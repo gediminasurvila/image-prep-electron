@@ -12,6 +12,7 @@
  * processes (see sharpClient.ts) to keep this process's glib clean for the GUI.
  */
 import { app, BrowserWindow, Menu, shell } from 'electron'
+import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { registerIpcHandlers } from './ipc'
 import { shutdownWorkers } from './sharpClient'
@@ -23,6 +24,22 @@ Menu.setApplicationMenu(null)
 
 const isDev = !app.isPackaged
 
+/**
+ * On Linux the running window's taskbar icon is not derived from the build icon
+ * automatically (unlike Windows' embedded .ico and macOS' .icns bundle icon), so
+ * we point BrowserWindow at a PNG. In packaged builds it is copied to the
+ * resources dir via electron-builder `extraResources`; in dev it lives at
+ * build/icon.png in the project root. Returns undefined on Windows/macOS, which
+ * use their platform icon.
+ */
+function linuxWindowIcon(): string | undefined {
+  if (process.platform !== 'linux') return undefined
+  const candidate = app.isPackaged
+    ? join(process.resourcesPath, 'icon.png')
+    : join(__dirname, '../../build/icon.png')
+  return existsSync(candidate) ? candidate : undefined
+}
+
 function createWindow(): void {
   const win = new BrowserWindow({
     width: 1440,
@@ -32,6 +49,7 @@ function createWindow(): void {
     show: false,
     backgroundColor: '#181b27',
     title: 'ImagePrep',
+    icon: linuxWindowIcon(),
     autoHideMenuBar: true,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),

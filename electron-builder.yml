@@ -9,6 +9,11 @@ directories:
 files:
   - out/**/*
   - package.json
+# Copy the icon into the app resources so the Linux BrowserWindow can load it at
+# runtime (process.resourcesPath/icon.png).
+extraResources:
+  - from: build/icon.png
+    to: icon.png
 # Ensure sharp's native binaries + bundled libvips are unpacked from the asar
 # archive so they can be dlopen'd / LD_PRELOAD'd at runtime.
 asarUnpack:
