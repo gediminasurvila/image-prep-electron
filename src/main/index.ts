@@ -11,10 +11,15 @@
  * Sharp/libvips is NOT loaded here — all image work runs in forked worker
  * processes (see sharpClient.ts) to keep this process's glib clean for the GUI.
  */
-import { app, BrowserWindow, shell } from 'electron'
+import { app, BrowserWindow, Menu, shell } from 'electron'
 import { join } from 'node:path'
 import { registerIpcHandlers } from './ipc'
 import { shutdownWorkers } from './sharpClient'
+
+// Remove the default application menu (File / Edit / View / Help). On Windows
+// and Linux this drops the window menu bar entirely; on macOS the system app
+// menu remains (the OS requires it) but is reduced to the minimal default.
+Menu.setApplicationMenu(null)
 
 const isDev = !app.isPackaged
 
@@ -27,6 +32,7 @@ function createWindow(): void {
     show: false,
     backgroundColor: '#181b27',
     title: 'ImagePrep',
+    autoHideMenuBar: true,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       contextIsolation: true,

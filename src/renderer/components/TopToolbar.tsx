@@ -6,6 +6,7 @@ import { runBatch, useProcessingStore } from '../stores/processingStore'
 import { api } from '../lib/electronApi'
 import { buildProcessRequest, exportReadiness } from '../lib/validation'
 import { ToolbarButton } from './ui'
+import { Logo } from './Logo'
 
 export function TopToolbar(): React.JSX.Element {
   const importPaths = useImageQueueStore((s) => s.importPaths)
@@ -62,14 +63,6 @@ export function TopToolbar(): React.JSX.Element {
 
   return (
     <div className="flex items-center gap-2 border-b border-white/5 bg-panel px-3 py-2">
-      <div className="flex items-center gap-2 pr-2">
-        <span className="select-none text-sm font-semibold tracking-tight text-white/90">
-          Image<span className="text-accent">Prep</span>
-        </span>
-      </div>
-
-      <div className="h-5 w-px bg-white/10" />
-
       <ToolbarButton onClick={handleImportImages} disabled={isProcessing} title="Import images">
         <FilePlus2 size={15} /> Import
       </ToolbarButton>
@@ -112,6 +105,11 @@ export function TopToolbar(): React.JSX.Element {
         >
           <DownloadCloud size={15} /> Export All
         </ToolbarButton>
+
+        <div className="h-5 w-px bg-white/10" />
+        <span className="flex select-none items-center pl-0.5" title="ImagePrep">
+          <Logo size={22} />
+        </span>
       </div>
     </div>
   )
