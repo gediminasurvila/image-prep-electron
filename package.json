@@ -1,0 +1,51 @@
+{
+  "name": "imageprep",
+  "version": "0.1.0",
+  "description": "ImagePrep - prepare images for web upload (resize, enhance, compress, convert) fully offline.",
+  "main": "./out/main/index.js",
+  "author": "Gediminas Survila",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gediminasurvila/image-prep-electron.git"
+  },
+  "scripts": {
+    "dev": "electron-vite dev",
+    "dev:nosandbox": "ELECTRON_DISABLE_SANDBOX=1 electron-vite dev",
+    "start": "electron-vite preview",
+    "build": "electron-vite build",
+    "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
+    "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
+    "typecheck": "npm run typecheck:node && npm run typecheck:web",
+    "postinstall": "electron-builder install-app-deps",
+    "pack:dir": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:linux": "npm run build && electron-builder --linux"
+  },
+  "dependencies": {
+    "electron-store": "^8.2.0",
+    "sharp": "^0.32.6",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.19",
+    "electron": "^31.2.0",
+    "electron-builder": "^24.13.3",
+    "electron-vite": "^2.3.0",
+    "lucide-react": "^0.408.0",
+    "postcss": "^8.4.39",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-dropzone": "^14.2.3",
+    "tailwindcss": "^3.4.6",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.3",
+    "zustand": "^4.5.4"
+  }
+}

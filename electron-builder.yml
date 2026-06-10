@@ -1,0 +1,42 @@
+appId: com.imageprep.app
+productName: ImagePrep
+copyright: Copyright © 2026 ImagePrep
+directories:
+  output: release
+  buildResources: build
+# build/icon.png (1024x1024) is auto-detected; electron-builder derives the
+# platform .ico / .icns from it.
+files:
+  - out/**/*
+  - package.json
+# Ensure sharp's native binaries + bundled libvips are unpacked from the asar
+# archive so they can be dlopen'd / LD_PRELOAD'd at runtime.
+asarUnpack:
+  - node_modules/sharp/**/*
+  - node_modules/@img/**/*
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  artifactName: ${productName}-${version}-Setup-${arch}.${ext}
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+mac:
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+  category: public.app-category.photography
+  artifactName: ${productName}-${version}-${arch}.${ext}
+linux:
+  target:
+    - target: AppImage
+      arch:
+        - x64
+  category: Graphics
+  synopsis: Prepare images for web upload — resize, enhance, compress, convert.
+  artifactName: ${productName}-${version}-${arch}.${ext}
