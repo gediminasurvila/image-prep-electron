@@ -496,16 +496,21 @@
 
       /* Before / after */
       .ba-list {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
+        column-count: 2;
+        column-gap: 20px;
       }
       .ba {
-        margin: 0;
+        break-inside: avoid;
+        margin: 0 0 20px;
         border: 1px solid var(--line);
         border-radius: var(--radius);
         overflow: hidden;
         background: var(--panel);
+      }
+      @media (max-width: 720px) {
+        .ba-list {
+          column-count: 1;
+        }
       }
       .ba-slider {
         position: relative;
