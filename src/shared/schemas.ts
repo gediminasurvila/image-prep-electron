@@ -31,7 +31,7 @@ export const exportFormatSchema = z.enum(['jpeg', 'png', 'webp', 'avif'])
 
 export const conflictModeSchema = z.enum(['rename', 'overwrite', 'skip'])
 
-export const autoEnhanceStrengthSchema = z.enum(['low', 'medium', 'high'])
+export const enhancementModeSchema = z.enum(['auto', 'manual'])
 
 export const imageItemSchema = z.object({
   id: z.string().min(1),
@@ -63,8 +63,7 @@ export const resizeSettingsSchema = z.object({
 }) satisfies z.ZodType<ResizeSettings>
 
 export const enhancementSettingsSchema = z.object({
-  autoEnhance: z.boolean(),
-  autoEnhanceStrength: autoEnhanceStrengthSchema,
+  mode: enhancementModeSchema,
   autoLevels: z.boolean(),
   gamma: z.number().min(1).max(3),
   contrast: z.number().min(0.1).max(3),

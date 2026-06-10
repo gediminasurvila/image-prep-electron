@@ -98,8 +98,11 @@ unpacked from the asar archive so they load at runtime.
 - **Resize**: none · fit · fill-crop · exact · width · height · percentage, with
   prevent-upscale and aspect-ratio options. Geometry follows the spec formulas
   (`src/shared/resize.ts`).
-- **Enhancement**: auto-levels (`normalize`), gamma, contrast (`linear`),
-  saturation (`modulate`), sharpen-after-resize, plus low/medium/high presets.
+- **Enhancement**: **Auto** (default) analyzes each image independently and
+  corrects its own flaws — white-balance cast (gray-world), low contrast
+  (`normalize`), and under-exposure (adaptive `gamma`) — then lightly sharpens.
+  **Manual** mode unlocks gamma, contrast (`linear`), saturation (`modulate`),
+  and sharpen sliders. The Auto/Manual toggle locks the controls in Auto.
 - **Export**: JPEG / PNG / WebP / AVIF, fixed-quality **or** target-file-size
   mode, strip/preserve metadata, sRGB conversion, output folder, filename
   prefix/suffix, and conflict handling (rename / overwrite / skip).

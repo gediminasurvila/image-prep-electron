@@ -3,12 +3,13 @@
  * / export settings. Applying a preset merges its values over the current
  * settings (see `applyPreset` in the renderer settings store).
  */
-import { applyStrengthPreset } from './enhance'
 import { defaultEnhancementSettings } from './defaults'
 import type { EnhancementSettings, ImagePreset } from './types'
 
-function enhancement(strength: 'low' | 'medium' | 'high'): EnhancementSettings {
-  return applyStrengthPreset(defaultEnhancementSettings(), strength)
+// Presets use per-image auto enhancement (the default). Users can switch the
+// Enhancement panel to Manual afterwards if they want explicit control.
+function enhancement(): EnhancementSettings {
+  return defaultEnhancementSettings()
 }
 
 export const DEFAULT_PRESETS: ImagePreset[] = [
@@ -23,7 +24,7 @@ export const DEFAULT_PRESETS: ImagePreset[] = [
       preserveAspectRatio: true,
       preventUpscale: true
     },
-    enhancement: enhancement('medium'),
+    enhancement: enhancement(),
     export: {
       format: 'webp',
       useTargetFileSize: true,
@@ -42,7 +43,7 @@ export const DEFAULT_PRESETS: ImagePreset[] = [
       preserveAspectRatio: true,
       preventUpscale: true
     },
-    enhancement: enhancement('medium'),
+    enhancement: enhancement(),
     export: {
       format: 'webp',
       useTargetFileSize: true,
@@ -62,7 +63,7 @@ export const DEFAULT_PRESETS: ImagePreset[] = [
       preserveAspectRatio: true,
       preventUpscale: true
     },
-    enhancement: enhancement('medium'),
+    enhancement: enhancement(),
     export: {
       format: 'webp',
       useTargetFileSize: true,
@@ -81,7 +82,7 @@ export const DEFAULT_PRESETS: ImagePreset[] = [
       preserveAspectRatio: true,
       preventUpscale: true
     },
-    enhancement: enhancement('low'),
+    enhancement: enhancement(),
     export: {
       format: 'webp',
       useTargetFileSize: true,
@@ -101,7 +102,7 @@ export const DEFAULT_PRESETS: ImagePreset[] = [
       preserveAspectRatio: true,
       preventUpscale: true
     },
-    enhancement: enhancement('medium'),
+    enhancement: enhancement(),
     export: {
       format: 'jpeg',
       useTargetFileSize: true,

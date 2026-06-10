@@ -5,10 +5,10 @@
  */
 export type {
   AppSettings,
-  AutoEnhanceStrength,
   BatchProgressEvent,
   BatchSummary,
   ConflictMode,
+  EnhancementMode,
   EnhancementSettings,
   ExportFormat,
   ExportSettings,

@@ -141,6 +141,71 @@ interface ProcessedRaw {
  * processed pixels as a raw buffer. Decoding to raw once lets the target-size
  * binary search re-encode many times without re-running resize/enhance.
  */
+interface AutoCorrections {
+  /** Per-channel linear multipliers for white-balance, or null if no cast. */
+  whiteBalance: { mul: number[]; offset: number[] } | null
+  /** Gamma > 1 brightens an under-exposed image; 1 = no change. */
+  gamma: number
+  /** Saturation multiplier for modulate(). */
+  saturation: number
+}
+
+const clamp = (v: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, v))
+
+/**
+ * Analyze a single image and derive corrections tailored to its own flaws.
+ *
+ *  - White balance: gray-world assumption — the average of R/G/B should be
+ *    neutral grey, so each channel is scaled toward the overall mean. Only
+ *    applied when a meaningful colour cast is detected.
+ *  - Exposure: if mean luminance is low, raise gamma to brighten.
+ *  - Contrast: handled by normalize() in the pipeline (per-image range stretch).
+ *
+ * Stats are computed on a 256px downscale for speed; means/luminance are
+ * representative of the full image.
+ */
+async function computeAutoCorrections(
+  inputPath: string,
+  toSrgb: boolean
+): Promise<AutoCorrections> {
+  let sampler = sharp(inputPath, { failOn: 'none' })
+    .rotate()
+    .resize({ width: 256, withoutEnlargement: true })
+  if (toSrgb) sampler = sampler.toColorspace('srgb')
+
+  const stats = await sampler.stats()
+  const ch = stats.channels
+  const result: AutoCorrections = { whiteBalance: null, gamma: 1.0, saturation: 1.05 }
+
+  // Need at least RGB to reason about colour/exposure.
+  if (ch.length < 3) return result
+
+  const r = ch[0].mean
+  const g = ch[1].mean
+  const b = ch[2].mean
+  const gray = (r + g + b) / 3
+
+  // Gray-world white balance, with clamped multipliers to avoid over-correction.
+  const mr = r > 1 ? clamp(gray / r, 0.75, 1.35) : 1
+  const mg = g > 1 ? clamp(gray / g, 0.75, 1.35) : 1
+  const mb = b > 1 ? clamp(gray / b, 0.75, 1.35) : 1
+  const cast = Math.max(Math.abs(mr - 1), Math.abs(mg - 1), Math.abs(mb - 1))
+  if (cast > 0.04) {
+    // Match the multiplier array length to the channel count (keep alpha at 1).
+    const mul = ch.length === 4 ? [mr, mg, mb, 1] : [mr, mg, mb]
+    const offset = new Array(ch.length).fill(0)
+    result.whiteBalance = { mul, offset }
+  }
+
+  // Exposure: brighten when mean luminance is low (Rec. 601 weights).
+  const luma = 0.299 * r + 0.587 * g + 0.114 * b
+  if (luma < 115) {
+    result.gamma = clamp(1 + (115 - luma) * 0.005, 1, 1.6)
+  }
+
+  return result
+}
+
 async function buildProcessedRaw(
   req: ProcessImageRequest,
   maxWidthOverride?: number
@@ -155,9 +220,25 @@ async function buildProcessedRaw(
     pipeline = pipeline.toColorspace('srgb')
   }
 
-  // 4 + 5. Tone adjustments. Applied only when auto-enhance is enabled; the UI
-  // sliders feed these same fields, so "manual" tweaks live here too.
-  if (enhancement.autoEnhance) {
+  // 4 + 5. Tone adjustments.
+  if (enhancement.mode === 'auto') {
+    // Analyze THIS image's stats and correct its specific flaws.
+    const auto = await computeAutoCorrections(req.image.inputPath, exp.convertToSrgb)
+    if (auto.whiteBalance) {
+      // Per-channel multipliers remove a colour cast (gray-world white balance).
+      pipeline = pipeline.linear(auto.whiteBalance.mul, auto.whiteBalance.offset)
+    }
+    // normalize() stretches contrast to the full range — fixes flat/low-contrast.
+    pipeline = pipeline.normalize()
+    if (auto.gamma > 1.0) {
+      // Brighten under-exposed images.
+      pipeline = pipeline.gamma(auto.gamma)
+    }
+    if (auto.saturation !== 1.0) {
+      pipeline = pipeline.modulate({ saturation: auto.saturation })
+    }
+  } else {
+    // Manual: the user controls these values directly.
     if (enhancement.autoLevels) {
       pipeline = pipeline.normalize()
     }
@@ -200,9 +281,11 @@ async function buildProcessedRaw(
     pipeline = pipeline.resize({ width: maxWidthOverride, withoutEnlargement: true })
   }
 
-  // 7. Sharpen after resize.
-  if (enhancement.sharpen) {
-    pipeline = pipeline.sharpen({ sigma: enhancement.sharpenSigma })
+  // 7. Sharpen after resize. Auto mode applies a light, consistent sharpen.
+  const doSharpen = enhancement.mode === 'auto' ? true : enhancement.sharpen
+  const sharpenSigma = enhancement.mode === 'auto' ? 0.8 : enhancement.sharpenSigma
+  if (doSharpen) {
+    pipeline = pipeline.sharpen({ sigma: sharpenSigma })
   }
 
   const { data, info } = await pipeline.raw().toBuffer({ resolveWithObject: true })

@@ -8,7 +8,6 @@
  */
 import { create } from 'zustand'
 import { api } from '../lib/electronApi'
-import { applyStrengthPreset } from '../lib/presets'
 import { findPreset } from '@shared/presets'
 import {
   defaultEnhancementSettings,
@@ -17,7 +16,7 @@ import {
 } from '@shared/defaults'
 import type {
   AppSettings,
-  AutoEnhanceStrength,
+  EnhancementMode,
   EnhancementSettings,
   ExportSettings,
   ResizeSettings
@@ -35,8 +34,9 @@ interface SettingsState {
   setResize: (patch: Partial<ResizeSettings>) => void
   setEnhancement: (patch: Partial<EnhancementSettings>) => void
   setExport: (patch: Partial<ExportSettings>) => void
-  setAutoEnhanceStrength: (strength: AutoEnhanceStrength) => void
+  setEnhancementMode: (mode: EnhancementMode) => void
   applyPreset: (id: string) => void
+  clearPreset: () => void
   getAppSettings: () => AppSettings
 }
 
@@ -96,11 +96,8 @@ export const useSettingsStore = create<SettingsState>((set, get) => {
       persistAfter()
     },
 
-    setAutoEnhanceStrength: (strength) => {
-      set((s) => ({
-        enhancement: applyStrengthPreset(s.enhancement, strength),
-        selectedPresetId: undefined
-      }))
+    setEnhancementMode: (mode) => {
+      set((s) => ({ enhancement: { ...s.enhancement, mode }, selectedPresetId: undefined }))
       persistAfter()
     },
 
@@ -115,6 +112,13 @@ export const useSettingsStore = create<SettingsState>((set, get) => {
         export: { ...s.export, ...preset.export },
         selectedPresetId: id
       }))
+      persistAfter()
+    },
+
+    clearPreset: () => {
+      // Switch to fully custom settings (keeps current values, drops the preset
+      // highlight) so the user can freely tune resize/export/enhancement.
+      set({ selectedPresetId: undefined })
       persistAfter()
     },
 

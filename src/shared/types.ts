@@ -40,17 +40,23 @@ export interface ResizeSettings {
   preventUpscale: boolean
 }
 
-export type AutoEnhanceStrength = 'low' | 'medium' | 'high'
+/**
+ * Enhancement mode:
+ *  - 'auto':  the processor analyzes each image independently and corrects its
+ *             own flaws (white-balance cast, low contrast, under-exposure) then
+ *             lightly sharpens. No user-adjustable values.
+ *  - 'manual': the user controls gamma/contrast/saturation/sharpen directly.
+ */
+export type EnhancementMode = 'auto' | 'manual'
 
 export interface EnhancementSettings {
-  autoEnhance: boolean
-  autoEnhanceStrength: AutoEnhanceStrength
+  mode: EnhancementMode
 
+  // Manual controls — only applied when mode === 'manual'.
   autoLevels: boolean
   gamma: number
   contrast: number
   saturation: number
-
   sharpen: boolean
   sharpenSigma: number
 }

@@ -18,8 +18,9 @@ export function defaultResizeSettings(): ResizeSettings {
 
 export function defaultEnhancementSettings(): EnhancementSettings {
   return {
-    autoEnhance: true,
-    autoEnhanceStrength: 'medium',
+    // Auto is the default: each image is analyzed and corrected individually.
+    mode: 'auto',
+    // Sensible starting values for when the user switches to Manual.
     autoLevels: true,
     gamma: 1.0,
     contrast: 1.08,

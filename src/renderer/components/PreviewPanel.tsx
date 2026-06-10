@@ -25,7 +25,17 @@ function passthroughRequest(image: ImageItem, settings: AppSettings): ProcessIma
   return {
     image,
     resize: { ...settings.resize, enabled: false, mode: 'none' },
-    enhancement: { ...settings.enhancement, autoEnhance: false, sharpen: false },
+    // Manual mode with neutral values = no enhancement, so this shows the
+    // untouched original.
+    enhancement: {
+      ...settings.enhancement,
+      mode: 'manual',
+      autoLevels: false,
+      gamma: 1,
+      contrast: 1,
+      saturation: 1,
+      sharpen: false
+    },
     export: {
       ...settings.export,
       format: 'webp',
