@@ -50,6 +50,7 @@ jobs:
             release/*.exe
             release/*.dmg
             release/*.AppImage
+            release/*.deb
 
   release:
     name: Publish GitHub Release
