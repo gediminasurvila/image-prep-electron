@@ -14,28 +14,9 @@ function enhancement(): EnhancementSettings {
 
 export const DEFAULT_PRESETS: ImagePreset[] = [
   {
-    id: 'blog-image',
-    name: 'Blog Image',
-    description: '1200px wide WebP, ~300 KB. Good default for article images.',
-    resize: {
-      enabled: true,
-      mode: 'width',
-      width: 1200,
-      preserveAspectRatio: true,
-      preventUpscale: true
-    },
-    enhancement: enhancement(),
-    export: {
-      format: 'webp',
-      useTargetFileSize: true,
-      targetFileSizeKb: 300,
-      filenameSuffix: '-web'
-    }
-  },
-  {
-    id: 'product-image',
-    name: 'Product Image',
-    description: '1600px wide WebP, ~500 KB. Crisp product shots.',
+    id: 'web-image',
+    name: 'Web Image',
+    description: '1600px wide · Auto (WebP) · ~400 KB — blog, product & general use.',
     resize: {
       enabled: true,
       mode: 'width',
@@ -45,16 +26,16 @@ export const DEFAULT_PRESETS: ImagePreset[] = [
     },
     enhancement: enhancement(),
     export: {
-      format: 'webp',
+      format: 'auto',
       useTargetFileSize: true,
-      targetFileSizeKb: 500,
-      filenameSuffix: '-product'
+      targetFileSizeKb: 400,
+      filenameSuffix: '-web'
     }
   },
   {
     id: 'thumbnail',
     name: 'Thumbnail',
-    description: '400x400 fill-crop WebP, ~80 KB.',
+    description: '400×400 fill-crop · Auto (WebP) · ~80 KB.',
     resize: {
       enabled: true,
       mode: 'fill-crop',
@@ -65,35 +46,16 @@ export const DEFAULT_PRESETS: ImagePreset[] = [
     },
     enhancement: enhancement(),
     export: {
-      format: 'webp',
+      format: 'auto',
       useTargetFileSize: true,
       targetFileSizeKb: 80,
       filenameSuffix: '-thumb'
     }
   },
   {
-    id: 'hero-banner',
-    name: 'Hero Banner',
-    description: '1920px wide WebP, ~700 KB. Large headers.',
-    resize: {
-      enabled: true,
-      mode: 'width',
-      width: 1920,
-      preserveAspectRatio: true,
-      preventUpscale: true
-    },
-    enhancement: enhancement(),
-    export: {
-      format: 'webp',
-      useTargetFileSize: true,
-      targetFileSizeKb: 700,
-      filenameSuffix: '-hero'
-    }
-  },
-  {
-    id: 'social-preview',
-    name: 'Social Preview',
-    description: '1200x630 fill-crop JPEG, ~300 KB. Open Graph / Twitter cards.',
+    id: 'social',
+    name: 'Social',
+    description: '1200×630 fill-crop · JPEG · ~300 KB — Open Graph / Twitter cards.',
     resize: {
       enabled: true,
       mode: 'fill-crop',

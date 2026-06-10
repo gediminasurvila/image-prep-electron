@@ -17,6 +17,7 @@ export function ExportSettingsPanel(): React.JSX.Element {
   const avifSupported = useSettingsStore((s) => s.avifSupported)
 
   const formatOptions: { value: ExportFormat; label: string; disabled?: boolean }[] = [
+    { value: 'auto', label: 'Auto (recommended)' },
     { value: 'jpeg', label: 'JPEG' },
     { value: 'png', label: 'PNG' },
     { value: 'webp', label: 'WebP' },
@@ -58,6 +59,18 @@ export function ExportSettingsPanel(): React.JSX.Element {
           options={formatOptions}
         />
       </Field>
+
+      {exp.format === 'auto' && (
+        <p className="text-[11px] leading-snug text-subtle">
+          Picks <span className="text-fg">WebP</span> — best size &amp; quality for the web, and
+          keeps transparency from PNGs.
+        </p>
+      )}
+      {exp.format === 'jpeg' && (
+        <p className="text-[11px] leading-snug text-warn">
+          JPEG has no transparency — transparent images are flattened onto white.
+        </p>
+      )}
 
       <Toggle
         label="Target file size mode"

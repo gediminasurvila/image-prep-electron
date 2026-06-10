@@ -32,7 +32,7 @@ export function defaultEnhancementSettings(): EnhancementSettings {
 
 export function defaultExportSettings(): ExportSettings {
   return {
-    format: 'webp',
+    format: 'auto',
     quality: 80,
     useTargetFileSize: true,
     targetFileSizeKb: 300,

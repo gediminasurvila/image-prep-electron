@@ -4,7 +4,7 @@
  */
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
-import type { ConflictMode, ExportFormat } from '@shared/types'
+import type { ConcreteFormat, ConflictMode } from '@shared/types'
 
 /** Extensions we accept on import (lowercase, no dot). */
 export const SUPPORTED_INPUT_EXTENSIONS = [
@@ -24,21 +24,21 @@ export function isSupportedInput(filePath: string): boolean {
   return (SUPPORTED_INPUT_EXTENSIONS as readonly string[]).includes(ext)
 }
 
-const FORMAT_EXTENSIONS: Record<ExportFormat, string> = {
+const FORMAT_EXTENSIONS: Record<ConcreteFormat, string> = {
   jpeg: 'jpg',
   png: 'png',
   webp: 'webp',
   avif: 'avif'
 }
 
-export function extensionForFormat(format: ExportFormat): string {
+export function extensionForFormat(format: ConcreteFormat): string {
   return FORMAT_EXTENSIONS[format]
 }
 
 export interface OutputNameParams {
   inputPath: string
   outputFolder: string
-  format: ExportFormat
+  format: ConcreteFormat
   prefix: string
   suffix: string
 }

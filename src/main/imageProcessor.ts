@@ -33,6 +33,7 @@ import {
   resolveOutputPath
 } from './fileUtils'
 import type {
+  ConcreteFormat,
   ExportFormat,
   ExportSettings,
   ImageMetadata,
@@ -40,6 +41,15 @@ import type {
   ProcessImageRequest,
   ProcessImageResult
 } from '@shared/types'
+
+/**
+ * Resolve the user's format choice to a concrete encoder format. 'auto' picks
+ * WebP — the best general web format: small, high quality, and (unlike JPEG)
+ * able to preserve transparency.
+ */
+function resolveFormat(format: ExportFormat): ConcreteFormat {
+  return format === 'auto' ? 'webp' : format
+}
 
 // Avoid unbounded native concurrency; we manage our own queue on top.
 sharp.concurrency(1)
@@ -98,6 +108,7 @@ async function getSingleMetadata(inputPath: string): Promise<ImageMetadata> {
       height,
       sizeBytes: stat.size,
       format: meta.format ?? path.extname(inputPath).slice(1).toLowerCase(),
+      hasAlpha: meta.hasAlpha ?? false,
       thumbnailDataUrl
     }
   } catch (err) {
@@ -303,23 +314,30 @@ function rawToSharp(raw: ProcessedRaw): Sharp {
   })
 }
 
-function applyFormat(pipeline: Sharp, format: ExportFormat, quality: number): Sharp {
+function applyFormat(
+  pipeline: Sharp,
+  format: ConcreteFormat,
+  quality: number
+): Sharp {
   switch (format) {
     case 'jpeg':
-      return pipeline.jpeg({ quality, mozjpeg: true })
+      // JPEG has no alpha channel; flatten any transparency onto white so the
+      // result isn't composited over black. (Opaque images are unaffected.)
+      return pipeline.flatten({ background: '#ffffff' }).jpeg({ quality, mozjpeg: true })
     case 'webp':
-      return pipeline.webp({ quality })
+      return pipeline.webp({ quality }) // preserves transparency
     case 'avif':
-      return pipeline.avif({ quality })
+      return pipeline.avif({ quality }) // preserves transparency
     case 'png':
       // PNG quality only affects palette quantization; keep max compression.
-      return pipeline.png({ compressionLevel: 9 })
+      return pipeline.png({ compressionLevel: 9 }) // preserves transparency
   }
 }
 
 async function encodeOnce(
   raw: ProcessedRaw,
   exp: ExportSettings,
+  fmt: ConcreteFormat,
   quality: number
 ): Promise<Buffer> {
   let pipeline = rawToSharp(raw)
@@ -328,7 +346,7 @@ async function encodeOnce(
     // available after decoding to raw (see Known Limitations).
     pipeline = pipeline.withMetadata()
   }
-  pipeline = applyFormat(pipeline, exp.format, quality)
+  pipeline = applyFormat(pipeline, fmt, quality)
   return pipeline.toBuffer()
 }
 
@@ -341,7 +359,7 @@ interface EncodeResult {
   warning?: string
 }
 
-function qualityRangeFor(format: ExportFormat): { min: number; max: number } {
+function qualityRangeFor(format: ConcreteFormat): { min: number; max: number } {
   switch (format) {
     case 'jpeg':
       return { min: 40, max: 95 }
@@ -362,9 +380,10 @@ function qualityRangeFor(format: ExportFormat): { min: number; max: number } {
 async function encodeToTargetSize(
   raw: ProcessedRaw,
   exp: ExportSettings,
+  fmt: ConcreteFormat,
   targetBytes: number
 ): Promise<EncodeResult> {
-  const { min, max } = qualityRangeFor(exp.format)
+  const { min, max } = qualityRangeFor(fmt)
   let lo = min
   let hi = max
   let bestBuffer: Buffer | null = null
@@ -372,7 +391,7 @@ async function encodeToTargetSize(
 
   while (lo <= hi) {
     const q = Math.floor((lo + hi) / 2)
-    const buffer = await encodeOnce(raw, exp, q)
+    const buffer = await encodeOnce(raw, exp, fmt, q)
     if (buffer.length <= targetBytes) {
       bestBuffer = buffer
       bestQuality = q
@@ -387,7 +406,7 @@ async function encodeToTargetSize(
   }
 
   // Target unreachable even at minimum quality: encode at min and warn.
-  const fallback = await encodeOnce(raw, exp, min)
+  const fallback = await encodeOnce(raw, exp, fmt, min)
   return {
     buffer: fallback,
     qualityUsed: min,
@@ -396,12 +415,16 @@ async function encodeToTargetSize(
 }
 
 /** Decide between fixed-quality and target-size encoding. */
-async function encodeFinal(raw: ProcessedRaw, exp: ExportSettings): Promise<EncodeResult> {
+async function encodeFinal(
+  raw: ProcessedRaw,
+  exp: ExportSettings,
+  fmt: ConcreteFormat
+): Promise<EncodeResult> {
   const wantsTarget = exp.useTargetFileSize && exp.targetFileSizeKb && exp.targetFileSizeKb > 0
 
-  if (wantsTarget && exp.format === 'png') {
+  if (wantsTarget && fmt === 'png') {
     // PNG is lossless; target-size search doesn't apply.
-    const buffer = await encodeOnce(raw, exp, exp.quality)
+    const buffer = await encodeOnce(raw, exp, fmt, exp.quality)
     return {
       buffer,
       qualityUsed: exp.quality,
@@ -411,10 +434,10 @@ async function encodeFinal(raw: ProcessedRaw, exp: ExportSettings): Promise<Enco
 
   if (wantsTarget) {
     const targetBytes = (exp.targetFileSizeKb as number) * 1024
-    return encodeToTargetSize(raw, exp, targetBytes)
+    return encodeToTargetSize(raw, exp, fmt, targetBytes)
   }
 
-  const buffer = await encodeOnce(raw, exp, exp.quality)
+  const buffer = await encodeOnce(raw, exp, fmt, exp.quality)
   return { buffer, qualityUsed: exp.quality }
 }
 
@@ -440,11 +463,15 @@ export async function processImage(req: ProcessImageRequest): Promise<ProcessIma
       throw new Error('Input file is missing or unreadable.')
     })
 
+    // Resolve the user's format choice to a concrete one ('auto' -> webp).
+    const fmt = resolveFormat(req.export.format)
+    const hasAlpha = req.image.hasAlpha ?? false
+
     // Resolve the output path early so a "skip" conflict avoids heavy work.
     const basePath = buildBaseOutputPath({
       inputPath: req.image.inputPath,
       outputFolder: req.export.outputFolder,
-      format: req.export.format,
+      format: fmt,
       prefix: req.export.filenamePrefix,
       suffix: req.export.filenameSuffix
     })
@@ -460,13 +487,19 @@ export async function processImage(req: ProcessImageRequest): Promise<ProcessIma
       }
     }
 
-    if (req.export.format === 'avif' && !(await isAvifSupported())) {
+    if (fmt === 'avif' && !(await isAvifSupported())) {
       return { ...base, error: 'AVIF encoding is not available in this build.' }
     }
 
     const raw = await buildProcessedRaw(req)
-    const encoded = await encodeFinal(raw, req.export)
+    const encoded = await encodeFinal(raw, req.export, fmt)
     await fs.writeFile(resolved.outputPath, encoded.buffer)
+
+    // Surface transparency loss when the user explicitly chose JPEG.
+    const alphaWarning =
+      fmt === 'jpeg' && hasAlpha
+        ? 'Transparency was flattened onto white (JPEG has no alpha channel).'
+        : undefined
 
     return {
       ...base,
@@ -477,7 +510,7 @@ export async function processImage(req: ProcessImageRequest): Promise<ProcessIma
       outputWidth: raw.width,
       outputHeight: raw.height,
       qualityUsed: encoded.qualityUsed,
-      warning: encoded.warning
+      warning: encoded.warning ?? alphaWarning
     }
   } catch (err) {
     return { ...base, error: errorMessage(err) }
@@ -493,7 +526,9 @@ export async function generatePreview(req: ProcessImageRequest): Promise<Preview
       throw new Error('Input file is missing or unreadable.')
     })
 
-    if (req.export.format === 'avif' && !(await isAvifSupported())) {
+    const fmt = resolveFormat(req.export.format)
+
+    if (fmt === 'avif' && !(await isAvifSupported())) {
       return {
         imageId: req.image.id,
         success: false,
@@ -503,7 +538,7 @@ export async function generatePreview(req: ProcessImageRequest): Promise<Preview
 
     // Full-resolution processed pixels -> accurate output size + quality.
     const fullRaw = await buildProcessedRaw(req)
-    const encoded = await encodeFinal(fullRaw, req.export)
+    const encoded = await encodeFinal(fullRaw, req.export, fmt)
 
     // For display we downscale to a manageable preview size and encode WebP.
     let displayRaw = fullRaw

@@ -49,6 +49,7 @@ export const useImageQueueStore = create<ImageQueueState>((set, get) => ({
         originalHeight: m.height,
         originalSizeBytes: m.sizeBytes,
         format: m.format,
+        hasAlpha: m.hasAlpha,
         thumbnailDataUrl: m.thumbnailDataUrl,
         status: m.error ? 'error' : 'pending',
         error: m.error

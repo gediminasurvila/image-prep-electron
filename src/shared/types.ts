@@ -17,6 +17,7 @@ export interface ImageItem {
   originalHeight: number
   originalSizeBytes: number
   format: string
+  hasAlpha?: boolean
   thumbnailDataUrl?: string
   status: ImageStatus
   outputPath?: string
@@ -61,7 +62,14 @@ export interface EnhancementSettings {
   sharpenSigma: number
 }
 
-export type ExportFormat = 'jpeg' | 'png' | 'webp' | 'avif'
+/** A concrete encoder format. */
+export type ConcreteFormat = 'jpeg' | 'png' | 'webp' | 'avif'
+
+/**
+ * User-facing format choice. 'auto' lets the app pick the best web format per
+ * image (WebP — small, high quality, and transparency-preserving).
+ */
+export type ExportFormat = ConcreteFormat | 'auto'
 
 export type ConflictMode = 'rename' | 'overwrite' | 'skip'
 
@@ -107,6 +115,7 @@ export interface ImageMetadata {
   height: number
   sizeBytes: number
   format: string
+  hasAlpha?: boolean
   thumbnailDataUrl?: string
   error?: string
 }

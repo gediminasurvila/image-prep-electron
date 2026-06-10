@@ -27,7 +27,7 @@ export const resizeModeSchema = z.enum([
   'percentage'
 ])
 
-export const exportFormatSchema = z.enum(['jpeg', 'png', 'webp', 'avif'])
+export const exportFormatSchema = z.enum(['jpeg', 'png', 'webp', 'avif', 'auto'])
 
 export const conflictModeSchema = z.enum(['rename', 'overwrite', 'skip'])
 
@@ -41,6 +41,7 @@ export const imageItemSchema = z.object({
   originalHeight: z.number().int().nonnegative(),
   originalSizeBytes: z.number().nonnegative(),
   format: z.string(),
+  hasAlpha: z.boolean().optional(),
   thumbnailDataUrl: z.string().optional(),
   status: imageStatusSchema,
   outputPath: z.string().optional(),

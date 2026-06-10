@@ -94,7 +94,7 @@ unpacked from the asar archive so they load at runtime.
 - Debounced auto-preview on setting changes + a manual **Update preview** button.
 
 **Settings (right column)**
-- **Presets**: Blog Image, Product Image, Thumbnail, Hero Banner, Social Preview.
+- **Presets** (compact chips): Custom · Web Image · Thumbnail · Social.
 - **Resize**: none · fit · fill-crop · exact · width · height · percentage, with
   prevent-upscale and aspect-ratio options. Geometry follows the spec formulas
   (`src/shared/resize.ts`).
@@ -103,9 +103,12 @@ unpacked from the asar archive so they load at runtime.
   (`normalize`), and under-exposure (adaptive `gamma`) — then lightly sharpens.
   **Manual** mode unlocks gamma, contrast (`linear`), saturation (`modulate`),
   and sharpen sliders. The Auto/Manual toggle locks the controls in Auto.
-- **Export**: JPEG / PNG / WebP / AVIF, fixed-quality **or** target-file-size
-  mode, strip/preserve metadata, sRGB conversion, output folder, filename
-  prefix/suffix, and conflict handling (rename / overwrite / skip).
+- **Export**: **Auto (recommended)** / JPEG / PNG / WebP / AVIF, fixed-quality
+  **or** target-file-size mode, strip metadata, sRGB conversion, output folder,
+  filename prefix/suffix, and conflict handling (rename / overwrite / skip).
+- **Transparency**: source alpha (e.g. PNG) is **preserved automatically** —
+  Auto picks WebP, and WebP/PNG/AVIF all keep alpha. Only an explicit **JPEG**
+  choice flattens transparency (onto white), with a per-image warning.
 
 **Processing pipeline** (`src/main/imageProcessor.ts`)
 1. Load → 2. `rotate()` (EXIF orientation) → 3. `toColorspace('srgb')` →
