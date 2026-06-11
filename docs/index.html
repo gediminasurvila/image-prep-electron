@@ -462,15 +462,10 @@
       /* Download */
       .dl {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 16px;
       }
-      @media (max-width: 880px) {
-        .dl {
-          grid-template-columns: repeat(2, 1fr);
-        }
-      }
-      @media (max-width: 480px) {
+      @media (max-width: 640px) {
         .dl {
           grid-template-columns: 1fr;
         }
@@ -516,21 +511,68 @@
         color: var(--subtle);
         min-height: 16px;
       }
-      .dl-card a.dlbtn {
+      .dl-card .dlbtn,
+      .dl-card .dlmenu {
         margin-top: auto;
+        width: 100%;
+      }
+      .dl-card .dlbtn {
+        justify-content: center;
+        font-size: 15px;
+        padding: 11px 16px;
+      }
+      /* Download button with a dropdown of variants */
+      .dlmenu {
+        position: relative;
+      }
+      .dlmenu-trigger {
         width: 100%;
         justify-content: center;
         font-size: 15px;
         padding: 11px 16px;
       }
-      .dl-card .dl-alt {
-        margin-top: 9px;
-        font-size: 12.5px;
-        font-weight: 600;
-        color: var(--muted);
+      .dlmenu-trigger .caret {
+        opacity: 0.8;
+        transition: transform 0.15s ease;
       }
-      .dl-card .dl-alt:hover {
+      .dlmenu-trigger[aria-expanded='true'] .caret {
+        transform: rotate(180deg);
+      }
+      .dlmenu-list {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: calc(100% + 8px);
+        z-index: 30;
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 6px;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+        text-align: left;
+      }
+      .dlmenu-list[hidden] {
+        display: none;
+      }
+      .dlmenu-list a {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 9px 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
         color: var(--fg);
+      }
+      .dlmenu-list a:hover {
+        background: var(--fill);
+      }
+      .dlmenu-list .opt-sub {
+        font-size: 11.5px;
+        font-weight: 500;
+        color: var(--subtle);
+        white-space: nowrap;
       }
 
       /* Before / after */
@@ -960,19 +1002,22 @@
               <div class="file">.exe installer</div>
               <a class="btn btn-ghost dlbtn" data-dl="win" href="https://github.com/gediminasurvila/image-prep-electron/releases/latest">Download</a>
             </div>
-            <div class="dl-card" data-os="mac-arm">
+            <div class="dl-card" data-os="mac">
               <div class="os"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.5-.15-2.8.85-3.5.85-.72 0-1.83-.83-3-.81-1.55.02-2.98.9-3.78 2.29-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.63zM14.1 5.6c.64-.78 1.07-1.85.95-2.93-.92.04-2.04.61-2.7 1.39-.59.69-1.11 1.79-.97 2.84 1.03.08 2.08-.52 2.72-1.3z"/></svg></div>
               <h3>macOS</h3>
-              <span class="variant">Apple Silicon</span>
-              <div class="file">M1 – M4 · .dmg</div>
-              <a class="btn btn-ghost dlbtn" data-dl="mac-arm" href="https://github.com/gediminasurvila/image-prep-electron/releases/latest">Download</a>
-            </div>
-            <div class="dl-card" data-os="mac-intel">
-              <div class="os"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.5-.15-2.8.85-3.5.85-.72 0-1.83-.83-3-.81-1.55.02-2.98.9-3.78 2.29-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.63zM14.1 5.6c.64-.78 1.07-1.85.95-2.93-.92.04-2.04.61-2.7 1.39-.59.69-1.11 1.79-.97 2.84 1.03.08 2.08-.52 2.72-1.3z"/></svg></div>
-              <h3>macOS</h3>
-              <span class="variant">Intel</span>
-              <div class="file">2020 &amp; earlier · .dmg</div>
-              <a class="btn btn-ghost dlbtn" data-dl="mac-intel" href="https://github.com/gediminasurvila/image-prep-electron/releases/latest">Download</a>
+              <span class="variant">Apple Silicon &amp; Intel</span>
+              <div class="file">.dmg</div>
+              <div class="dlmenu">
+                <button type="button" class="btn btn-ghost dlmenu-trigger" aria-haspopup="true" aria-expanded="false">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+                  Download
+                  <svg class="caret" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="dlmenu-list" role="menu" hidden>
+                  <a role="menuitem" data-dl="mac-arm" href="https://github.com/gediminasurvila/image-prep-electron/releases/latest"><span>Apple Silicon</span><span class="opt-sub">M1–M4 · .dmg</span></a>
+                  <a role="menuitem" data-dl="mac-intel" href="https://github.com/gediminasurvila/image-prep-electron/releases/latest"><span>Intel</span><span class="opt-sub">2020 &amp; earlier · .dmg</span></a>
+                </div>
+              </div>
             </div>
             <div class="dl-card" data-os="linux">
               <div class="os">
@@ -990,9 +1035,18 @@
               </div>
               <h3>Linux</h3>
               <span class="variant">x86-64</span>
-              <div class="file">AppImage · .deb</div>
-              <a class="btn btn-ghost dlbtn" data-dl="linux" href="https://github.com/gediminasurvila/image-prep-electron/releases/latest">Download .AppImage</a>
-              <a class="dl-alt" data-dl="linux-deb" href="https://github.com/gediminasurvila/image-prep-electron/releases/latest">.deb for Debian / Ubuntu →</a>
+              <div class="file">AppImage &amp; .deb</div>
+              <div class="dlmenu">
+                <button type="button" class="btn btn-ghost dlmenu-trigger" aria-haspopup="true" aria-expanded="false">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+                  Download
+                  <svg class="caret" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="dlmenu-list" role="menu" hidden>
+                  <a role="menuitem" data-dl="linux" href="https://github.com/gediminasurvila/image-prep-electron/releases/latest"><span>AppImage</span><span class="opt-sub">portable · any distro</span></a>
+                  <a role="menuitem" data-dl="linux-deb" href="https://github.com/gediminasurvila/image-prep-electron/releases/latest"><span>.deb</span><span class="opt-sub">Debian / Ubuntu · app icon</span></a>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1065,24 +1119,48 @@
         slider.addEventListener('pointercancel', stop);
       });
 
+      // Download dropdowns (macOS / Linux variants)
+      function closeAllMenus() {
+        document.querySelectorAll('.dlmenu-list').forEach((l) => l.setAttribute('hidden', ''));
+        document
+          .querySelectorAll('.dlmenu-trigger')
+          .forEach((t) => t.setAttribute('aria-expanded', 'false'));
+      }
+      document.querySelectorAll('.dlmenu').forEach((menu) => {
+        const trigger = menu.querySelector('.dlmenu-trigger');
+        const list = menu.querySelector('.dlmenu-list');
+        trigger.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const willOpen = list.hasAttribute('hidden');
+          closeAllMenus();
+          if (willOpen) {
+            list.removeAttribute('hidden');
+            trigger.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+      document.addEventListener('click', closeAllMenus);
+      document.addEventListener('keydown', (e) => e.key === 'Escape' && closeAllMenus());
+
       // OS detection -> make the visitor's platform the primary download.
       (function detectOS() {
         const ua = navigator.userAgent;
         let key = null;
         if (/Win/i.test(ua)) key = 'windows';
-        else if (/Mac/i.test(ua)) key = 'mac-arm';
+        else if (/Mac/i.test(ua)) key = 'mac';
         else if (/Linux|X11/i.test(ua)) key = 'linux';
         if (!key) return;
         const card = document.querySelector(`.dl-card[data-os="${key}"]`);
         if (card) {
           card.classList.add('sel');
-          const btn = card.querySelector('.dlbtn');
+          // First .btn = plain download (Windows) or the menu trigger (mac/linux).
+          const btn = card.querySelector('.btn');
           if (btn) {
             btn.classList.remove('btn-ghost');
             btn.classList.add('btn-primary');
           }
         }
-        const label = { windows: 'Windows', 'mac-arm': 'macOS', linux: 'Linux' }[key];
+        const label = { windows: 'Windows', mac: 'macOS', linux: 'Linux' }[key];
         const hl = document.getElementById('hero-download-label');
         if (hl && label) hl.textContent = 'Download for ' + label;
       })();
@@ -1114,7 +1192,7 @@
           });
           // Hero button -> detected OS direct link when known.
           const selKey = document.querySelector('.dl-card.sel')?.dataset.os;
-          const heroMap = { windows: 'win', 'mac-arm': 'mac-arm', linux: 'linux' };
+          const heroMap = { windows: 'win', mac: 'mac-arm', linux: 'linux' };
           const heroUrl = selKey && heroMap[selKey] ? url(map[heroMap[selKey]]) : null;
           if (heroUrl) document.getElementById('hero-download').href = heroUrl;
         })
